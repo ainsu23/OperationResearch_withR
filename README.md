@@ -9,3 +9,4 @@ sources:
 En la carpeta R están los siguientes ejemplos:
 
  - Asignación de trabajadores a turnos / Aplica IIS, si es necesario.
+ - Asignación de clientes a trabajadores con capacidad.
