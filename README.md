@@ -6,7 +6,6 @@ sources:
  - https://www.gurobi.com/documentation/9.1/examples/a_list_of_the_grb_examples.html
  - http://roi.r-forge.r-project.org/introduction.html
 
-En la carpeta R están los siguientes ejemplos:
+R folder contains the following examples: 
 
- - Asignación de trabajadores a turnos / Aplica IIS, si es necesario.
- - Asignación de clientes a trabajadores con capacidad.
+ - Allocation of clients to workers with capacity.
