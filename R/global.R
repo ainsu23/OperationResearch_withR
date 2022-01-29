@@ -8,12 +8,15 @@ library(dplyr)
 library(tidyr)
 library(ROI)
 library(ROI.plugin.symphony)
+library(ROI.plugin.lpsolve)
 library(ompr)
 library(ompr.roi)
 library(stringr)
 library(tibble)
 library(Matrix)
 library(lubridate)
+library(shinyWidgets)
+library(shiny)
 
 # Se establece conexión a una instancia de PostgrSQL
 conn <- dbConnect(

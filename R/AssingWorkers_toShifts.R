@@ -1,18 +1,23 @@
 # Ejemplo sencillo de asignación de personal a turnos 
 # usando paquetes ompr
 
+
 # Cargue  librerías y conexión a PostrSQL---------------------------------------
 rm(list = ls())
 source("R/global.R")
 
+assign_WtoShifts <- function(ntu, ntr, rango){
+
+print("ntu")  
+print(ntu)
 # Data
-ntu <- 365
-ntr <- 30
+# ntu <- 365
+# ntr <- 30
 turnos<- list(
   "turnos" = data.frame(
     "turnos" = seq.Date(today(),today()+ntu-1,by = "days"),
     "turnos_id" = seq(1:ntu),
-    "requerimientos" = sample((ntr-3):ntr,ntu,TRUE)
+    "requerimientos" = sample((ntr-5):ntr,ntu,TRUE)
     ),
   "num_turnos" = ntu
 )
@@ -75,6 +80,7 @@ factibilidad <-
                             FALSE
                             )
          ) 
+print(factibilidad)
 IIS <- FALSE
 if (FALSE %in% (factibilidad$satisface)) {
   turnos$num_turnos <- nrow(
@@ -128,3 +134,6 @@ asignados <-
     left_join(trabajadores$disponibilidad,
             by = c("tr"="id","tu"="turnos_id")) %>% 
     select(-satisface)
+
+return(asignados)
+}
