@@ -1,0 +1,299 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1820" height="1270" viewBox="0 0 1820 1270" font-family="Helvetica, Arial, sans-serif">
+<defs><marker id="flecha" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#374151"/></marker></defs>
+<rect width="1820" height="1270" fill="#ffffff"/>
+<line x1="20" y1="740" x2="1800" y2="740" stroke="#e5e7eb" stroke-width="2"/>
+<line x1="20" y1="995" x2="1800" y2="995" stroke="#e5e7eb" stroke-width="2"/>
+<line x1="20" y1="1140" x2="1800" y2="1140" stroke="#e5e7eb" stroke-width="2"/>
+<line x1="235.0" y1="200.0" x2="255.0" y2="200.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="305.0" y1="200.0" x2="325.0" y2="200.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="375.0" y1="200.0" x2="395.0" y2="200.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="445.0" y1="200.0" x2="465.0" y2="200.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="515.0" y1="200.0" x2="535.0" y2="200.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="515.0" y1="310.0" x2="535.0" y2="310.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="585.0" y1="310.0" x2="605.0" y2="310.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="655.0" y1="310.0" x2="675.0" y2="310.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="725.0" y1="310.0" x2="745.0" y2="310.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="795.0" y1="310.0" x2="815.0" y2="310.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="865.0" y1="310.0" x2="885.0" y2="310.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="935.0" y1="310.0" x2="955.0" y2="310.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1005.0" y1="310.0" x2="1025.0" y2="310.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1075.0" y1="480.0" x2="1095.0" y2="480.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1145.0" y1="480.0" x2="1165.0" y2="480.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1215.0" y1="480.0" x2="1235.0" y2="480.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1285.0" y1="480.0" x2="1305.0" y2="480.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1355.0" y1="480.0" x2="1375.0" y2="480.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1285.0" y1="590.0" x2="1305.0" y2="590.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1355.0" y1="590.0" x2="1375.0" y2="590.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1425.0" y1="590.0" x2="1445.0" y2="590.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1495.0" y1="590.0" x2="1515.0" y2="590.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1565.0" y1="590.0" x2="1585.0" y2="590.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1635.0" y1="590.0" x2="1655.0" y2="590.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="363.5" y1="214.0" x2="389.5" y2="241.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="418.0" y1="264.5" x2="467.9" y2="296.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="372.1" y1="214.0" x2="422.0" y2="245.5" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="450.5" y1="269.0" x2="476.5" y2="296.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="433.5" y1="214.0" x2="459.5" y2="241.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="488.0" y1="264.5" x2="537.9" y2="296.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="442.1" y1="214.0" x2="492.0" y2="245.5" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="520.5" y1="269.0" x2="546.5" y2="296.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="503.5" y1="214.0" x2="529.5" y2="241.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="558.0" y1="264.5" x2="607.9" y2="296.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="512.1" y1="214.0" x2="562.0" y2="245.5" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="590.5" y1="269.0" x2="616.5" y2="296.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="573.5" y1="214.0" x2="599.5" y2="241.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="628.0" y1="264.5" x2="677.9" y2="296.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="582.1" y1="214.0" x2="632.0" y2="245.5" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="660.5" y1="269.0" x2="686.5" y2="296.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="856.3" y1="324.0" x2="893.7" y2="356.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="929.6" y1="384.0" x2="960.4" y2="406.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="996.3" y1="434.0" x2="1033.7" y2="466.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="926.3" y1="324.0" x2="963.7" y2="356.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="999.6" y1="384.0" x2="1030.4" y2="406.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1066.3" y1="434.0" x2="1103.7" y2="466.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="996.3" y1="324.0" x2="1033.7" y2="356.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1069.6" y1="384.0" x2="1100.4" y2="406.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1136.3" y1="434.0" x2="1173.7" y2="466.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1066.3" y1="324.0" x2="1103.7" y2="356.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1139.6" y1="384.0" x2="1170.4" y2="406.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1206.3" y1="434.0" x2="1243.7" y2="466.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1133.5" y1="494.0" x2="1159.5" y2="521.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1188.0" y1="544.5" x2="1237.9" y2="576.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1142.1" y1="494.0" x2="1192.0" y2="525.5" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1220.5" y1="549.0" x2="1246.5" y2="576.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1203.5" y1="494.0" x2="1229.5" y2="521.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1258.0" y1="544.5" x2="1307.9" y2="576.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1212.1" y1="494.0" x2="1262.0" y2="525.5" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1290.5" y1="549.0" x2="1316.5" y2="576.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1273.5" y1="494.0" x2="1299.5" y2="521.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1328.0" y1="544.5" x2="1377.9" y2="576.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1282.1" y1="494.0" x2="1332.0" y2="525.5" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1360.5" y1="549.0" x2="1386.5" y2="576.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1343.5" y1="494.0" x2="1369.5" y2="521.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1398.0" y1="544.5" x2="1447.9" y2="576.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1352.1" y1="494.0" x2="1402.0" y2="525.5" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1430.5" y1="549.0" x2="1456.5" y2="576.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1413.5" y1="494.0" x2="1439.5" y2="521.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1468.0" y1="544.5" x2="1517.9" y2="576.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1422.1" y1="494.0" x2="1472.0" y2="525.5" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1500.5" y1="549.0" x2="1526.5" y2="576.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="288.8" y1="155.0" x2="234.5" y2="186.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="306.2" y1="155.0" x2="288.2" y2="186.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="323.8" y1="155.0" x2="341.8" y2="186.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="341.2" y1="155.0" x2="395.5" y2="186.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1494.3" y1="604.0" x2="1570.5" y2="648.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1551.2" y1="604.0" x2="1586.4" y2="648.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1608.1" y1="604.0" x2="1602.3" y2="648.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="1665.1" y1="604.0" x2="1618.1" y2="648.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="450.0" y1="860.0" x2="1010.0" y2="860.0" stroke="#374151" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#flecha)"/>
+<line x1="450.0" y1="866.1" x2="1010.0" y2="903.9" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="450.0" y1="872.2" x2="1010.0" y2="947.8" stroke="#374151" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#flecha)"/>
+<line x1="450.0" y1="903.9" x2="1010.0" y2="866.1" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="450.0" y1="910.0" x2="1010.0" y2="910.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="450.0" y1="916.1" x2="1010.0" y2="953.9" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="450.0" y1="947.8" x2="1010.0" y2="872.2" stroke="#374151" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#flecha)"/>
+<line x1="450.0" y1="953.9" x2="1010.0" y2="916.1" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="450.0" y1="960.0" x2="1010.0" y2="960.0" stroke="#374151" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#flecha)"/>
+<line x1="116.0" y1="1095.0" x2="180.0" y2="1095.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="360.0" y1="1095.0" x2="440.0" y2="1095.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<line x1="620.0" y1="1095.0" x2="700.0" y2="1095.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<text x="660.0" y="1088.0" font-size="11" text-anchor="middle" fill="#111827" stroke="#ffffff" stroke-width="3" paint-order="stroke">4</text>
+<line x1="880.0" y1="1095.0" x2="960.0" y2="1095.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<text x="920.0" y="1088.0" font-size="11" text-anchor="middle" fill="#111827" stroke="#ffffff" stroke-width="3" paint-order="stroke">4</text>
+<line x1="1140.0" y1="1095.0" x2="1250.0" y2="1095.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<text x="1195.0" y="1088.0" font-size="11" text-anchor="middle" fill="#111827" stroke="#ffffff" stroke-width="3" paint-order="stroke">vie, sáb</text>
+<line x1="1430.0" y1="1095.0" x2="1514.0" y2="1095.0" stroke="#374151" stroke-width="1.4" marker-end="url(#flecha)"/>
+<rect x="279.0" y="125.0" width="72" height="30" rx="6" fill="#1f2937" stroke="#1f2937" stroke-width="1.5"/>
+<text x="315.0" y="144" font-size="12" text-anchor="middle" fill="#ffffff">inicio</text>
+<rect x="1530.0" y="648.0" width="140" height="34" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1600" y="669" font-size="12" text-anchor="middle" fill="#1e3a8a">mar 27 (ver B)</text>
+<rect x="185.0" y="186.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="210" y="204" font-size="11" text-anchor="middle" fill="#1e3a8a">07:00</text>
+<rect x="255.0" y="186.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="280" y="204" font-size="11" text-anchor="middle" fill="#1e3a8a">07:30</text>
+<rect x="325.0" y="186.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="350" y="204" font-size="11" text-anchor="middle" fill="#1e3a8a">08:00</text>
+<rect x="395.0" y="186.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="420" y="204" font-size="11" text-anchor="middle" fill="#1e3a8a">08:30</text>
+<rect x="465.0" y="186.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="490" y="204" font-size="11" text-anchor="middle" fill="#1e3a8a">09:00</text>
+<rect x="535.0" y="186.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="560" y="204" font-size="11" text-anchor="middle" fill="#1e3a8a">09:30</text>
+<rect x="465.0" y="296.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="490" y="314" font-size="11" text-anchor="middle" fill="#1e3a8a">09:00</text>
+<rect x="535.0" y="296.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="560" y="314" font-size="11" text-anchor="middle" fill="#1e3a8a">09:30</text>
+<rect x="605.0" y="296.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="630" y="314" font-size="11" text-anchor="middle" fill="#1e3a8a">10:00</text>
+<rect x="675.0" y="296.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="700" y="314" font-size="11" text-anchor="middle" fill="#1e3a8a">10:30</text>
+<rect x="745.0" y="296.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="770" y="314" font-size="11" text-anchor="middle" fill="#1e3a8a">11:00</text>
+<rect x="815.0" y="296.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="840" y="314" font-size="11" text-anchor="middle" fill="#1e3a8a">11:30</text>
+<rect x="885.0" y="296.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="910" y="314" font-size="11" text-anchor="middle" fill="#1e3a8a">12:00</text>
+<rect x="955.0" y="296.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="980" y="314" font-size="11" text-anchor="middle" fill="#1e3a8a">12:30</text>
+<rect x="1025.0" y="296.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1050" y="314" font-size="11" text-anchor="middle" fill="#1e3a8a">13:00</text>
+<rect x="1025.0" y="466.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1050" y="484" font-size="11" text-anchor="middle" fill="#1e3a8a">13:00</text>
+<rect x="1095.0" y="466.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1120" y="484" font-size="11" text-anchor="middle" fill="#1e3a8a">13:30</text>
+<rect x="1165.0" y="466.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1190" y="484" font-size="11" text-anchor="middle" fill="#1e3a8a">14:00</text>
+<rect x="1235.0" y="466.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1260" y="484" font-size="11" text-anchor="middle" fill="#1e3a8a">14:30</text>
+<rect x="1305.0" y="466.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1330" y="484" font-size="11" text-anchor="middle" fill="#1e3a8a">15:00</text>
+<rect x="1375.0" y="466.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1400" y="484" font-size="11" text-anchor="middle" fill="#1e3a8a">15:30</text>
+<rect x="1235.0" y="576.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1260" y="594" font-size="11" text-anchor="middle" fill="#1e3a8a">14:30</text>
+<rect x="1305.0" y="576.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1330" y="594" font-size="11" text-anchor="middle" fill="#1e3a8a">15:00</text>
+<rect x="1375.0" y="576.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1400" y="594" font-size="11" text-anchor="middle" fill="#1e3a8a">15:30</text>
+<rect x="1445.0" y="576.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1470" y="594" font-size="11" text-anchor="middle" fill="#1e3a8a">16:00</text>
+<rect x="1515.0" y="576.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1540" y="594" font-size="11" text-anchor="middle" fill="#1e3a8a">16:30</text>
+<rect x="1585.0" y="576.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1610" y="594" font-size="11" text-anchor="middle" fill="#1e3a8a">17:00</text>
+<rect x="1655.0" y="576.0" width="50" height="28" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1680" y="594" font-size="11" text-anchor="middle" fill="#1e3a8a">17:30</text>
+<rect x="388.0" y="241.0" width="30" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="403" y="259" font-size="11" text-anchor="middle" fill="#14532d">:30</text>
+<rect x="422.0" y="241.0" width="30" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="437" y="259" font-size="11" text-anchor="middle" fill="#14532d">:45</text>
+<rect x="458.0" y="241.0" width="30" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="473" y="259" font-size="11" text-anchor="middle" fill="#14532d">:00</text>
+<rect x="492.0" y="241.0" width="30" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="507" y="259" font-size="11" text-anchor="middle" fill="#14532d">:15</text>
+<rect x="528.0" y="241.0" width="30" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="543" y="259" font-size="11" text-anchor="middle" fill="#14532d">:30</text>
+<rect x="562.0" y="241.0" width="30" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="577" y="259" font-size="11" text-anchor="middle" fill="#14532d">:45</text>
+<rect x="598.0" y="241.0" width="30" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="613" y="259" font-size="11" text-anchor="middle" fill="#14532d">:00</text>
+<rect x="632.0" y="241.0" width="30" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="647" y="259" font-size="11" text-anchor="middle" fill="#14532d">:15</text>
+<rect x="885.0" y="356.0" width="50" height="28" rx="6" fill="#ffedd5" stroke="#ea580c" stroke-width="1.5"/>
+<text x="910" y="374" font-size="11" text-anchor="middle" fill="#7c2d12">12:00</text>
+<rect x="955.0" y="406.0" width="50" height="28" rx="6" fill="#ffedd5" stroke="#ea580c" stroke-width="1.5"/>
+<text x="980" y="424" font-size="11" text-anchor="middle" fill="#7c2d12">12:30</text>
+<rect x="955.0" y="356.0" width="50" height="28" rx="6" fill="#ffedd5" stroke="#ea580c" stroke-width="1.5"/>
+<text x="980" y="374" font-size="11" text-anchor="middle" fill="#7c2d12">12:30</text>
+<rect x="1025.0" y="406.0" width="50" height="28" rx="6" fill="#ffedd5" stroke="#ea580c" stroke-width="1.5"/>
+<text x="1050" y="424" font-size="11" text-anchor="middle" fill="#7c2d12">13:00</text>
+<rect x="1025.0" y="356.0" width="50" height="28" rx="6" fill="#ffedd5" stroke="#ea580c" stroke-width="1.5"/>
+<text x="1050" y="374" font-size="11" text-anchor="middle" fill="#7c2d12">13:00</text>
+<rect x="1095.0" y="406.0" width="50" height="28" rx="6" fill="#ffedd5" stroke="#ea580c" stroke-width="1.5"/>
+<text x="1120" y="424" font-size="11" text-anchor="middle" fill="#7c2d12">13:30</text>
+<rect x="1095.0" y="356.0" width="50" height="28" rx="6" fill="#ffedd5" stroke="#ea580c" stroke-width="1.5"/>
+<text x="1120" y="374" font-size="11" text-anchor="middle" fill="#7c2d12">13:30</text>
+<rect x="1165.0" y="406.0" width="50" height="28" rx="6" fill="#ffedd5" stroke="#ea580c" stroke-width="1.5"/>
+<text x="1190" y="424" font-size="11" text-anchor="middle" fill="#7c2d12">14:00</text>
+<rect x="1158.0" y="521.0" width="30" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="1173" y="539" font-size="11" text-anchor="middle" fill="#14532d">:00</text>
+<rect x="1192.0" y="521.0" width="30" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="1207" y="539" font-size="11" text-anchor="middle" fill="#14532d">:15</text>
+<rect x="1228.0" y="521.0" width="30" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="1243" y="539" font-size="11" text-anchor="middle" fill="#14532d">:30</text>
+<rect x="1262.0" y="521.0" width="30" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="1277" y="539" font-size="11" text-anchor="middle" fill="#14532d">:45</text>
+<rect x="1298.0" y="521.0" width="30" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="1313" y="539" font-size="11" text-anchor="middle" fill="#14532d">:00</text>
+<rect x="1332.0" y="521.0" width="30" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="1347" y="539" font-size="11" text-anchor="middle" fill="#14532d">:15</text>
+<rect x="1368.0" y="521.0" width="30" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="1383" y="539" font-size="11" text-anchor="middle" fill="#14532d">:30</text>
+<rect x="1402.0" y="521.0" width="30" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="1417" y="539" font-size="11" text-anchor="middle" fill="#14532d">:45</text>
+<rect x="1438.0" y="521.0" width="30" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="1453" y="539" font-size="11" text-anchor="middle" fill="#14532d">:00</text>
+<rect x="1472.0" y="521.0" width="30" height="28" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="1487" y="539" font-size="11" text-anchor="middle" fill="#14532d">:15</text>
+<rect x="20.0" y="687.0" width="150" height="26" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="95" y="704" font-size="12" text-anchor="middle" fill="#1e3a8a">Trabaja (30 min)</text>
+<rect x="185.0" y="687.0" width="230" height="26" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+<text x="300" y="704" font-size="12" text-anchor="middle" fill="#14532d">Descanso (15 min en bloque de 30)</text>
+<rect x="430.0" y="687.0" width="200" height="26" rx="6" fill="#ffedd5" stroke="#ea580c" stroke-width="1.5"/>
+<text x="530" y="704" font-size="12" text-anchor="middle" fill="#7c2d12">Almuerzo (2 × 30 min)</text>
+<rect x="640.0" y="687.0" width="160" height="26" rx="6" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+<text x="720" y="704" font-size="12" text-anchor="middle" fill="#111827">Libre / medio día</text>
+<rect x="815.0" y="687.0" width="110" height="26" rx="6" fill="#1f2937" stroke="#1f2937" stroke-width="1.5"/>
+<text x="870" y="704" font-size="12" text-anchor="middle" fill="#ffffff">inicio / Fin</text>
+<rect x="270.0" y="845.0" width="180" height="30" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="360" y="864" font-size="12" text-anchor="middle" fill="#1e3a8a">Trabaja (último bloque)</text>
+<rect x="270.0" y="895.0" width="180" height="30" rx="6" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+<text x="360" y="914" font-size="12" text-anchor="middle" fill="#111827">Libre</text>
+<rect x="270.0" y="945.0" width="180" height="30" rx="6" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+<text x="360" y="964" font-size="12" text-anchor="middle" fill="#111827">Tarde_libre</text>
+<rect x="1010.0" y="845.0" width="180" height="30" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1100" y="864" font-size="12" text-anchor="middle" fill="#1e3a8a">Trabaja (primer bloque)</text>
+<rect x="1010.0" y="895.0" width="180" height="30" rx="6" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+<text x="1100" y="914" font-size="12" text-anchor="middle" fill="#111827">Libre</text>
+<rect x="1010.0" y="945.0" width="180" height="30" rx="6" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+<text x="1100" y="964" font-size="12" text-anchor="middle" fill="#111827">Mañana_libre</text>
+<rect x="44.0" y="1078.0" width="72" height="34" rx="6" fill="#1f2937" stroke="#1f2937" stroke-width="1.5"/>
+<text x="80" y="1099" font-size="12" text-anchor="middle" fill="#ffffff">inicio</text>
+<rect x="180.0" y="1078.0" width="180" height="34" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="270" y="1099" font-size="12" text-anchor="middle" fill="#1e3a8a">lun 26: red del día</text>
+<rect x="440.0" y="1078.0" width="180" height="34" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="530" y="1099" font-size="12" text-anchor="middle" fill="#1e3a8a">mar 27: red del día</text>
+<rect x="700.0" y="1078.0" width="180" height="34" rx="6" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+<text x="790" y="1099" font-size="12" text-anchor="middle" fill="#111827">mié 28: solo Libre</text>
+<rect x="960.0" y="1078.0" width="180" height="34" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1050" y="1099" font-size="12" text-anchor="middle" fill="#1e3a8a">jue 29: red del día</text>
+<rect x="1250.0" y="1078.0" width="180" height="34" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="1340" y="1099" font-size="12" text-anchor="middle" fill="#1e3a8a">dom 1: red del día</text>
+<rect x="1514.0" y="1078.0" width="72" height="34" rx="6" fill="#1f2937" stroke="#1f2937" stroke-width="1.5"/>
+<text x="1550" y="1099" font-size="12" text-anchor="middle" fill="#ffffff">Fin</text>
+<text x="20" y="34" font-size="18" font-weight="bold" text-anchor="start" fill="#111827">A. Un día de Andrés (lun 26 oct), bloques de 30 min</text>
+<text x="20" y="58" font-size="13" text-anchor="start" fill="#111827">«inicio» existe una sola vez por persona. Entrada a las 07:00, 07:30, 08:00 u 08:30. Cada fila «Trabaja» es una etapa del día: solo se baja de etapa por un descanso o por el almuerzo (confirmado).</text>
+<text x="525.0" y="176" font-size="12" font-weight="bold" text-anchor="middle" fill="#111827">Trabaja · antes de Descanso1</text>
+<text x="380" y="259" font-size="12" font-weight="bold" text-anchor="end" fill="#111827">Descanso1 · 15 min: 2 opciones por bloque</text>
+<text x="458" y="314" font-size="12" font-weight="bold" text-anchor="end" fill="#111827">Trabaja · entre Descanso1 y almuerzo</text>
+<text x="878" y="374" font-size="12" font-weight="bold" text-anchor="end" fill="#111827">Almuerzo · 1ª media hora (4 opciones)</text>
+<text x="948" y="424" font-size="12" font-weight="bold" text-anchor="end" fill="#111827">Almuerzo · 2ª media hora</text>
+<text x="1018" y="484" font-size="12" font-weight="bold" text-anchor="end" fill="#111827">Trabaja · entre almuerzo y Descanso2</text>
+<text x="1150" y="539" font-size="12" font-weight="bold" text-anchor="end" fill="#111827">Descanso2 · 15 min: 2 opciones por bloque</text>
+<text x="1228" y="594" font-size="12" font-weight="bold" text-anchor="end" fill="#111827">Trabaja · después de Descanso2</text>
+<text x="210" y="96" font-size="11" text-anchor="middle" fill="#111827">07:00</text>
+<text x="280" y="96" font-size="11" text-anchor="middle" fill="#111827">07:30</text>
+<text x="350" y="96" font-size="11" text-anchor="middle" fill="#111827">08:00</text>
+<text x="420" y="96" font-size="11" text-anchor="middle" fill="#111827">08:30</text>
+<text x="490" y="96" font-size="11" text-anchor="middle" fill="#111827">09:00</text>
+<text x="560" y="96" font-size="11" text-anchor="middle" fill="#111827">09:30</text>
+<text x="630" y="96" font-size="11" text-anchor="middle" fill="#111827">10:00</text>
+<text x="700" y="96" font-size="11" text-anchor="middle" fill="#111827">10:30</text>
+<text x="770" y="96" font-size="11" text-anchor="middle" fill="#111827">11:00</text>
+<text x="840" y="96" font-size="11" text-anchor="middle" fill="#111827">11:30</text>
+<text x="910" y="96" font-size="11" text-anchor="middle" fill="#111827">12:00</text>
+<text x="980" y="96" font-size="11" text-anchor="middle" fill="#111827">12:30</text>
+<text x="1050" y="96" font-size="11" text-anchor="middle" fill="#111827">13:00</text>
+<text x="1120" y="96" font-size="11" text-anchor="middle" fill="#111827">13:30</text>
+<text x="1190" y="96" font-size="11" text-anchor="middle" fill="#111827">14:00</text>
+<text x="1260" y="96" font-size="11" text-anchor="middle" fill="#111827">14:30</text>
+<text x="1330" y="96" font-size="11" text-anchor="middle" fill="#111827">15:00</text>
+<text x="1400" y="96" font-size="11" text-anchor="middle" fill="#111827">15:30</text>
+<text x="1470" y="96" font-size="11" text-anchor="middle" fill="#111827">16:00</text>
+<text x="1540" y="96" font-size="11" text-anchor="middle" fill="#111827">16:30</text>
+<text x="1610" y="96" font-size="11" text-anchor="middle" fill="#111827">17:00</text>
+<text x="1680" y="96" font-size="11" text-anchor="middle" fill="#111827">17:30</text>
+<text x="950" y="704" font-size="12" text-anchor="start" fill="#111827">Arco Trabaja → Trabaja: costo 0,5. Arco hacia o desde Libre: costo 4. Punteado = por confirmar.</text>
+<text x="20" y="774" font-size="18" font-weight="bold" text-anchor="start" fill="#111827">B. Unión entre dos días: no hay inicio ni Fin por día</text>
+<text x="20" y="798" font-size="13" text-anchor="start" fill="#111827">Los nodos donde termina el lunes se conectan directamente con los nodos donde empieza el martes.</text>
+<text x="360" y="832" font-size="13" font-weight="bold" text-anchor="middle" fill="#111827">termina lun 26</text>
+<text x="1100" y="832" font-size="13" font-weight="bold" text-anchor="middle" fill="#111827">empieza mar 27</text>
+<text x="1260" y="889" font-size="13" text-anchor="start" fill="#111827">Arcos que tocan Libre: costo 4 (sólidos).</text>
+<text x="1260" y="914" font-size="13" text-anchor="start" fill="#111827">Arcos sin Libre: costo por confirmar (punteados).</text>
+<text x="1260" y="939" font-size="13" text-anchor="start" fill="#111827">Mañana_libre y Tarde_libre: horario por confirmar.</text>
+<text x="20" y="1029" font-size="18" font-weight="bold" text-anchor="start" fill="#111827">C. La semana de cada persona: un solo inicio y un solo Fin</text>
+<text x="20" y="1053" font-size="13" text-anchor="start" fill="#111827">La misma red se copia para cada persona (Andrés, Klaudia, Oliver…). Si ya se sabe que un día es libre, ese día solo tiene su nodo Libre: no se crean nodos ni arcos de trabajo.</text>
+<text x="20" y="1174" font-size="16" font-weight="bold" text-anchor="start" fill="#111827">D. Reglas fuera del dibujo</text>
+<text x="20" y="1199" font-size="13" text-anchor="start" fill="#111827">Cobertura, en cada bloque de 30 min: Σ personas en «Trabaja» + demanda no atendida ≥ demanda. La demanda no atendida se penaliza y sirve para planear contrataciones. Quien está en descanso no cuenta.</text>
+<text x="20" y="1224" font-size="13" text-anchor="start" fill="#111827">Los costos son horas y cada día suma un total fijo: 8 h de trabajo + 1 h de almuerzo + 30 min de descanso = 9,5 h (libre: 4 + 4). Por eso la salida queda fija: entrada 07:00 → 16:30; 08:30 → 18:00.</text>
+<text x="20" y="1249" font-size="13" text-anchor="start" fill="#111827">Por confirmar: horas exactas de las ventanas de descanso, costo de los arcos de descanso (¿0,25?), de almuerzo y entre días, y horario del medio día libre.</text>
+</svg>
