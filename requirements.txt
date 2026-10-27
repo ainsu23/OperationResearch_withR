@@ -1,0 +1,8 @@
+pyomo
+highspy
+ortools
+scikit-learn
+simpy
+pandas
+numpy
+matplotlib
