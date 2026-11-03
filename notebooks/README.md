@@ -8,11 +8,19 @@ No necesitas instalar nada.
 1. Entra a https://colab.research.google.com.
 2. **Archivo → Abrir notebook → pestaña GitHub.**
 3. Escribe `ainsu23/OperationResearch_withR`. Si el repo es privado, marca *Include private repos* y autoriza tu cuenta de GitHub.
-4. Elige la rama `master` y abre el notebook de la lección. Si la lección nueva aún no está en `master`, elige la rama donde se subió (lección 3: `claude/affectionate-planck-x31ic6`; lección 4: `claude/nifty-volta-o9qira`).
+4. Elige la rama `master` y abre el notebook de la lección. Si la lección nueva aún no está en `master`, elige la rama donde se subió. Las lecciones 1 a 4 con notación matemática están en `claude/clever-cray-8tywgt`.
 5. Corre celda por celda con `Shift + Enter`. Antes de cada celda, adivina qué va a imprimir.
 6. Para guardar tus notas: **Archivo → Guardar una copia en Drive**.
 
 Si una celda no se entiende, pega la celda y su salida en el chat y la vemos juntos.
+
+## Notación matemática
+Cada problema trae su formulación como se escribe en un libro o en una entrevista, justo al lado de su versión en palabras y en Pyomo.
+- La primera vez que aparece un símbolo, una tabla dice cómo se lee, qué significa y su equivalente en Python o SQL.
+- Al final de cada lección, una tabla **Notación de hoy** junta los símbolos nuevos.
+- Orden en que aparecen: lección 1 ($\max$, $\sum$, $\forall$, $\in$, índices), lección 2 (dual, $\Delta$, funciones por tramos, matrices y transpuesta),
+  lección 3 ($\{0,1\}$ contra $[0,1]$, $\subseteq$, piso y techo, lógica $\Rightarrow \land \lor \neg$, big-M),
+  lección 4 (doble suma, permutaciones, $\det$, $\mathbb{Z}$, conjuntos por comprensión, función indicadora).
 
 ## Lecciones
 | # | Lección | Conceptos | Tamaño | Estrategia nueva |
