@@ -21,7 +21,7 @@ Supuesto: ~2 h entre semana, ~4 h fin de semana.
 2. **Python vs R.** La entrevista será en Python. → todos los scripts de `python/`.
 3. **Metaheurísticas.** → `python/sa_scheduling.py`.
 4. **Simulación / escenarios / digital twin.** → `python/simulation_scenarios.py`.
-5. **Producción / MLOps** (Docker, CI/CD, tests, MLflow, monitoreo). → día 5 nov.
+5. **Producción / MLOps** (Docker, CI/CD, tests, MLflow, monitoreo). → dom 8 nov.
 6. **Seniority** ("Leadership 1 yr"). → historias STAR de influencia.
 
 ### Arreglos rápidos al CV
@@ -40,28 +40,36 @@ Supuesto: ~2 h entre semana, ~4 h fin de semana.
 - Despliegue de un optimizador como servicio.
 - Contexto del sector y de la empresa.
 
-## 3. Calendario (actualizado el 27 oct)
-El calendario anterior tenía los días de la semana corridos en uno: el 26 de octubre fue lunes. La entrevista es el **miércoles 11 de noviembre**.
+## 3. Calendario (actualizado el 3 nov)
+El 26 de octubre fue lunes. La entrevista es el **miércoles 11 de noviembre**.
 
 Desde el 27 de octubre sigues la ruta de `notebooks/README.md`: una lección por día, de modelos pequeños a grandes.
 
+**Ajuste del 3 nov.** El 31 oct, el 1 y el 2 nov no hubo estudio: 3 lecciones atrás. Para no perder lo importante:
+- L5 y L6 van juntas en un notebook (`05_redes_y_turnos.ipynb`).
+- L11 (ML + optimización) sube al viernes y tiene un día completo: es la brecha más grande.
+- L9 y L10 van juntas el sábado: ya tienes los scripts.
+- Los 2 simulacros quedan en 1.
+
+### Hecho
+| Fecha | Lección o bloque |
+|---|---|
+| Lun 26 oct | Pitch + historias STAR |
+| Mar 27 | L1: tu primer modelo (programa lineal) |
+| Mié 28 | L2: cuánto vale una hora más (sensibilidad) |
+| Jue 29 | L3: decisiones sí/no (variables binarias) |
+| Vie 30 | L4: asignación (la estructura de tu modelo de cartera) |
+
+### Lo que falta
 | Fecha | Lección o bloque | Material de apoyo |
 |---|---|---|
-| Lun 26 oct | Pitch + historias STAR | `01_star_stories.md` |
-| Mar 27 | L1: tu primer modelo (programa lineal) | `notebooks/01_primer_modelo.ipynb` |
-| Mié 28 | L2: cuánto vale una hora más (sensibilidad) | `03_question_bank.md` §A |
-| Jue 29 | L3: decisiones sí/no (variables binarias) | `02_formulation_drills.md` (linealizaciones) |
-| Vie 30 | L4: asignación (la estructura de tu modelo de cartera) | `07_conceptos.md` §1 |
-| Sáb 31 | L5: redes y flujo | `07_conceptos.md` §1 |
-| Dom 1 nov | L6: tu red de turnos de Siigo | `09_red_siigo.md`, `diagramas/red_turnos_siigo.png` |
-| Lun 2 | L7: secuenciación (máquinas y barcos) | `python/jobshop_cpsat.py`, `08_modelos_sector.md` |
-| Mar 3 | L8: incertidumbre (simulación y escenarios) | `python/simulation_scenarios.py` |
-| Mié 4 | L9: heurísticas contra el óptimo | `python/sa_scheduling.py` |
-| Jue 5 | L10: varias metas (ponderado, lexicográfico, Pareto) | `python/cartera_simulada.py`, `07_conceptos.md` §2–5 |
+| Mar 3 nov | L5 + L6: redes y tu red de turnos de Siigo | `notebooks/05_redes_y_turnos.ipynb`, `09_red_siigo.md`, `diagramas/red_turnos_siigo.png` |
+| Mié 4 | L7: secuenciación (máquinas y barcos) | `python/jobshop_cpsat.py`, `08_modelos_sector.md` |
+| Jue 5 | L8: incertidumbre (simulación y escenarios) | `python/simulation_scenarios.py` |
 | Vie 6 | L11: ML + optimización (RUL → mantenimiento) | `python/rul_maintenance.py` |
-| Sáb 7 | ML, estadística y producción + Python/SQL cronometrado | `03_question_bank.md` §B–D, `04_coding_drills.md` |
-| Dom 8 | Simulacro 1: formulación en vivo + ML | — |
-| Lun 9 | Simulacro 2: caso completo + contexto del sector | `05_sector.md` |
+| Sáb 7 (4 h) | L9: heurísticas contra el óptimo + L10: varias metas (ponderado, lexicográfico, Pareto) | `python/sa_scheduling.py`, `python/cartera_simulada.py`, `07_conceptos.md` §2–5 |
+| Dom 8 (4 h) | ML, estadística y producción + Python/SQL cronometrado | `03_question_bank.md` §B–D, `04_coding_drills.md` |
+| Lun 9 | Simulacro único: formulación en vivo + ML + contexto del sector | `05_sector.md` |
 | Mar 10 | Repaso ligero, STAR en voz alta. Dormir bien | `01_star_stories.md` |
 | Mié 11 | Entrevista | — |
 
