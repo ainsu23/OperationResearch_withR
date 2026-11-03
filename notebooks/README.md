@@ -23,6 +23,22 @@ Cada problema trae su formulación como se escribe en un libro o en una entrevis
   lección 4 (doble suma, permutaciones, $\det$, $\mathbb{Z}$, conjuntos por comprensión, función indicadora),
   lecciones 5–6 ($G = (N, A)$, $\delta^+$ y $\delta^-$, $N \setminus O$, conjuntos indexados $S_i$ y sumas anidadas, $\emptyset$, $\cap$, familias laminares, matriz de incidencia, precio nodal $\pi_i$, nodos como tuplas, $\bigcup$, $\notin$).
 
+## Los dos tamaños de cada problema
+Todo problema tiene dos tamaños: el **modelo** (se cuenta con los conjuntos) y el **espacio de búsqueda** (cuántas soluciones hay).
+El primero crece lineal o cuadrático; el segundo, casi siempre exponencial. El solver no recorre el espacio: usa la estructura.
+
+| Lección | Problema | Modelo: variables · restricciones · no ceros | Espacio de búsqueda | Lo que revisó el método |
+|---|---|---|---|---|
+| 1 | Taller 2 × 2 | 2 · 3 · 5 | 10.201 planes enteros | 5 esquinas |
+| 2 | Planta 30 × 8 | 30 · 38 · 142 | hasta $\binom{68}{30} \approx 10^{19}$ esquinas | simplex, 6 ms |
+| 3 | Mochila de 5 proyectos | 5 · 1 · 5 | $2^5 = 32$ | 7 nodos de branch & bound |
+| 3 | Cartera de 20 proyectos | 20 · 13 · 71 | $2^{20} \approx 10^6$ (22.912 factibles) | 1 nodo + cortes |
+| 4 | Asignación 3 × 3 | 9 · 6 · 18 | $3! = 6$ asignaciones | el LP, sin ramificar |
+| 4 | Equipos 50 × 20 | 160 · 65 · 300 | $2^{140} \approx 10^{42}$ (sin el join: $10^{301}$) | el LP, sin ramificar |
+| 5 | Flujo con bases | 12 · 9 · 24 | — | el LP |
+| 5 | Camino más corto en 40 × 40 cuadras | 3.280 calles | $\approx 10^{23}$ caminos | Dijkstra, 2 ms |
+| 6 | Turnos: 12 personas, 1 semana | 3.038 · 2.166 · 9.502 | $60^{52} \approx 10^{92}$ semanas | < 1 s; crece lineal (pendiente ≈ 1) |
+
 ## Lecciones
 | # | Lección | Conceptos | Tamaño | Estrategia nueva |
 |---|---|---|---|---|
