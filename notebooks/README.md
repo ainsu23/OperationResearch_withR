@@ -8,7 +8,7 @@ No necesitas instalar nada.
 1. Entra a https://colab.research.google.com.
 2. **Archivo → Abrir notebook → pestaña GitHub.**
 3. Escribe `ainsu23/OperationResearch_withR`. Si el repo es privado, marca *Include private repos* y autoriza tu cuenta de GitHub.
-4. Elige la rama `master` y abre el notebook de la lección. Si la lección nueva aún no está en `master`, elige la rama donde se subió. Las lecciones 1 a 6 con notación matemática están en `claude/clever-cray-8tywgt`.
+4. Elige la rama `master` y abre el notebook de la lección. Si la lección nueva aún no está en `master`, elige la rama donde se subió. Las lecciones 1 a 7 con notación matemática están en `claude/optimistic-lovelace-e8kk6a`.
 5. Corre celda por celda con `Shift + Enter`. Antes de cada celda, adivina qué va a imprimir.
 6. Para guardar tus notas: **Archivo → Guardar una copia en Drive**.
 
@@ -21,7 +21,8 @@ Cada problema trae su formulación como se escribe en un libro o en una entrevis
 - Orden en que aparecen: lección 1 ($\max$, $\sum$, $\forall$, $\in$, índices), lección 2 (dual, $\Delta$, funciones por tramos, matrices y transpuesta),
   lección 3 ($\{0,1\}$ contra $[0,1]$, $\subseteq$, piso y techo, lógica $\Rightarrow \land \lor \neg$, big-M),
   lección 4 (doble suma, permutaciones, $\det$, $\mathbb{Z}$, conjuntos por comprensión, función indicadora),
-  lecciones 5–6 ($G = (N, A)$, $\delta^+$ y $\delta^-$, $N \setminus O$, conjuntos indexados $S_i$ y sumas anidadas, $\emptyset$, $\cap$, familias laminares, matriz de incidencia, precio nodal $\pi_i$, nodos como tuplas, $\bigcup$, $\notin$).
+  lecciones 5–6 ($G = (N, A)$, $\delta^+$ y $\delta^-$, $N \setminus O$, conjuntos indexados $S_i$ y sumas anidadas, $\emptyset$, $\cap$, familias laminares, matriz de incidencia, precio nodal $\pi_i$, nodos como tuplas, $\bigcup$, $\notin$),
+  lección 7 ($S_j$ y $C_j$, retraso $\max\{0, C_j - d_j\}$ linealizado, $n!$, $\binom{n}{2}$, $\prod$, $C_{\max}$, intervalos $[a, b)$, $\text{NoOverlap}$, dominios enteros, $x_{pvt}$ indexada en el tiempo).
 
 ## Los dos tamaños de cada problema
 Todo problema tiene dos tamaños: el **modelo** (se cuenta con los conjuntos) y el **espacio de búsqueda** (cuántas soluciones hay).
@@ -38,6 +39,10 @@ El primero crece lineal o cuadrático; el segundo, casi siempre exponencial. El 
 | 5 | Flujo con bases | 12 · 9 · 24 | — | el LP |
 | 5 | Camino más corto en 40 × 40 cuadras | 3.280 calles | $\approx 10^{23}$ caminos | Dijkstra, 2 ms |
 | 6 | Turnos: 12 personas, 1 semana | 3.038 · 2.166 · 9.502 | $60^{52} \approx 10^{92}$ semanas | < 1 s; crece lineal (pendiente ≈ 1) |
+| 7 | Una máquina, 4 trabajos | 14 · 16 · 44 | $4! = 24$ órdenes | cota LP 0 h: big-M débil |
+| 7 | Job shop 5 × 3 | 36 · 57 · 158 | 69.120 órdenes | MILP: cota LP 7 h contra 14 h; CP-SAT: 0,01 s |
+| 7 | Job shop 40 × 5 | 3.900 binarias (MILP) | $(40!)^5 \approx 10^{240}$ | MILP: gap 87 % a los 10 s; CP-SAT: óptimo en 0,03 s |
+| 7 | Barcos: 80 proyectos, 10 barcos, 120 días | 11.673 binarias | $(10 \cdot 120)^{80} \approx 10^{246}$ | LP a 0,1 % del MILP; < 1 s |
 
 ## Lecciones
 | # | Lección | Conceptos | Tamaño | Estrategia nueva |
@@ -48,10 +53,10 @@ El primero crece lineal o cuadrático; el segundo, casi siempre exponencial. El 
 | 4 | Asignación | asignación, goloso, matriz TU, pares factibles, modelo elástico, método húngaro | 3 × 3 → 50 ingenieros × 20 proyectos | crear solo los pares posibles (join); revisar candidatos antes de resolver |
 | 5 | Redes | nodos, arcos, conservación de flujo, transporte, matriz de incidencia, precio nodal, camino más corto | 2 almacenes → 3 bases → 4 parques eólicos | construir la red desde tablas (`groupby` para arcos que entran y salen) |
 | 6 | Tu red de turnos (Siigo) | red de tiempo, camino = turno, restricción extra, cobertura elástica, contratación | 1 persona, 1 día → 12 personas, 1 semana | generar solo la red factible; listar todos los caminos antes de optimizar |
-| 7 | Secuenciación | disyuntivas, big-M débil, CP-SAT | taller y barcos | elegir MILP o CP |
+| 7 | Secuenciación | disyuntiva, retraso, makespan, big-M débil, cota simple, CP-SAT, intervalos, NoOverlap, indexado en el tiempo | 1 máquina × 4 → 40 trabajos × 5 máquinas; 8 → 80 proyectos con barcos | elegir MILP o CP; precalcular costos por día y generar solo inicios factibles |
 | 8 | Incertidumbre | Monte Carlo, simulación, escenarios, estocástica de 2 etapas | muelles, repuestos | simular antes de optimizar |
 | 9 | Heurísticas | greedy, simulated annealing, warm start, límite de tiempo | 10 → 200 trabajos | comparar contra el óptimo |
 | 10 | Varias metas | ponderado, lexicográfico, Pareto | cartera simulada | resolver en secuencia |
 | 11 | ML + optimización | predict-then-optimize, cuantiles | RUL → mantenimiento | pipeline de punta a punta |
 
-Listas: lección 1 (`01_primer_modelo.ipynb`), lección 2 (`02_precio_sombra.ipynb`), lección 3 (`03_decisiones_si_no.ipynb`), lección 4 (`04_asignacion.ipynb`) y lecciones 5 y 6 juntas (`05_redes_y_turnos.ipynb`). Las siguientes se agregan una por una, a tu ritmo.
+Listas: lección 1 (`01_primer_modelo.ipynb`), lección 2 (`02_precio_sombra.ipynb`), lección 3 (`03_decisiones_si_no.ipynb`), lección 4 (`04_asignacion.ipynb`) lecciones 5 y 6 juntas (`05_redes_y_turnos.ipynb`) y lección 7 (`06_secuenciacion.ipynb`). Las siguientes se agregan una por una, a tu ritmo.

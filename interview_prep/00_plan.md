@@ -64,7 +64,7 @@ Desde el 27 de octubre sigues la ruta de `notebooks/README.md`: una lección por
 | Fecha | Lección o bloque | Material de apoyo |
 |---|---|---|
 | Mar 3 nov | L5 + L6: redes y tu red de turnos de Siigo | `notebooks/05_redes_y_turnos.ipynb`, `09_red_siigo.md`, `diagramas/red_turnos_siigo.png` |
-| Mié 4 | L7: secuenciación (máquinas y barcos) | `python/jobshop_cpsat.py`, `08_modelos_sector.md` |
+| Mié 4 | L7: secuenciación (máquinas y barcos) | `notebooks/06_secuenciacion.ipynb`, `python/jobshop_cpsat.py`, `08_modelos_sector.md` |
 | Jue 5 | L8: incertidumbre (simulación y escenarios) | `python/simulation_scenarios.py` |
 | Vie 6 | L11: ML + optimización (RUL → mantenimiento) | `python/rul_maintenance.py` |
 | Sáb 7 (4 h) | L9: heurísticas contra el óptimo + L10: varias metas (ponderado, lexicográfico, Pareto) | `python/sa_scheduling.py`, `python/cartera_simulada.py`, `07_conceptos.md` §2–5 |
