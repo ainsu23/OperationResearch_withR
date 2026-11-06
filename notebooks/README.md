@@ -8,7 +8,7 @@ No necesitas instalar nada.
 1. Entra a https://colab.research.google.com.
 2. **Archivo → Abrir notebook → pestaña GitHub.**
 3. Escribe `ainsu23/OperationResearch_withR`. Si el repo es privado, marca *Include private repos* y autoriza tu cuenta de GitHub.
-4. Elige la rama `master` y abre el notebook de la lección. Si la lección nueva aún no está en `master`, elige la rama donde se subió. Las lecciones 1 a 8 y la 11, con notación matemática, están en `claude/optimistic-lovelace-e8kk6a`.
+4. Elige la rama `master` y abre el notebook de la lección. Si la lección nueva aún no está en `master`, elige la rama donde se subió. Las lecciones 1 a 11, con notación matemática, están en `claude/optimistic-lovelace-e8kk6a`.
 5. Corre celda por celda con `Shift + Enter`. Antes de cada celda, adivina qué va a imprimir.
 6. Para guardar tus notas: **Archivo → Guardar una copia en Drive**.
 
@@ -24,6 +24,8 @@ Cada problema trae su formulación como se escribe en un libro o en una entrevis
   lecciones 5–6 ($G = (N, A)$, $\delta^+$ y $\delta^-$, $N \setminus O$, conjuntos indexados $S_i$ y sumas anidadas, $\emptyset$, $\cap$, familias laminares, matriz de incidencia, precio nodal $\pi_i$, nodos como tuplas, $\bigcup$, $\notin$),
   lección 7 ($S_j$ y $C_j$, retraso $\max\{0, C_j - d_j\}$ linealizado, $n!$, $\binom{n}{2}$, $\prod$, $C_{\max}$, intervalos $[a, b)$, $\text{NoOverlap}$, dominios enteros, $x_{pvt}$ indexada en el tiempo),
   lección 8 (escenarios $S$ y $\pi_s$, $\mathbb{E}[\cdot]$, primera etapa sin índice $s$ y segunda con $s$, $\mathbb{Z}_{\ge 0}$, $\text{Poisson}(\lambda)$, $\hat{\theta}$, $\frac{1}{N}\sum$, $\bar{x} \pm 1{,}96\, s/\sqrt{N}$, EVPI y VSS),
+  lección 9 (permutación $\pi$ y $\Pi_n$, $C_{\pi_k}$ como suma acumulada, notación de Graham $1 \,\Vert\, \sum w_j T_j$, índice ATC con $\exp$, vecindad $\mathcal{N}(\pi)$, $\Delta$, $T$ y $\alpha$ del recocido, $e^{-\Delta/T}$),
+  lección 10 ($f_1(x)$ y $f_2(x)$, dominancia $\succ$, $\iff$, $\nexists$, frontera $\mathcal{P}$, $f_k^*$, pesos $\lambda$, tolerancia $\varepsilon$, lexmax, $\omega_a$ y $\kappa_{ac}$, $z_\sigma$ min-max, $\prod_c (k_c + 1)$),
   lección 11 ($\hat{y}$, MAE con $\lvert \cdot \rvert$, cuantil $\tau$ y pérdida pinball $\rho_\tau$, cuantil calibrado $\hat{q} - \delta$, costo esperado precalculado $\bar{c}_{ed}$, $D \setminus \{0\}$).
 
 ## Los dos tamaños de cada problema
@@ -48,6 +50,10 @@ El primero crece lineal o cuadrático; el segundo, casi siempre exponencial. El 
 | 8 | Repuestos, 3 escenarios | 4 · 3 · 6 | 7 planes (0 a 6 módulos) | forma extendida |
 | 8 | Repuestos, SAA con 10.000 inviernos | 10.001 · 10.000 · 20.000 | los mismos planes; lo caro es el valor esperado | 1 s; estable desde 1.000 escenarios |
 | 8 | Red de repuestos: 3 bases, 4 parques, 1.000 escenarios | 16.006 · 7.003 · 31.006 | $7^3 = 343$ planes de stock | 2 s; estable desde 200 escenarios |
+| 9 | Banco de prueba: 8 trabajos con pesos | 44 · 64 · 184 (28 binarias) | $8! = 40.320$ órdenes | ATC llega al óptimo; búsqueda local en 5 movimientos |
+| 9 | 200 trabajos | 19.900 binarias (MILP) | $200! \approx 10^{375}$ | CP-SAT solo, peor que ATC; con pista, gap 5,9 % |
+| 10 | Cartera de 8 proyectos, 2 metas | 8 · 1 · 8 | $2^8 = 256$ (103 factibles, 5 en la frontera) | el ponderado ve 2 de 5; ε-constraint, las 5 |
+| 10 | Cartera Banco Agrario: 1.200 clientes, 22 asesores | 11.966 · 1.292 · 41.582 | $10^{1168}$ asignaciones | 1 a 17 s por punto de la frontera |
 | 11 | Mantenimiento: 3 turbinas, 6 días | 21 · 9 · 39 | 229 planes factibles de $7^3 = 343$ | asignación: el LP ya da enteros |
 | 11 | Mantenimiento: 640 turbinas, 60 días, 16 cuadrillas | 39.040 · 700 · 77.440 | $61^{640} \approx 10^{1143}$ | < 1 s; los escenarios no agregan variables |
 
@@ -62,9 +68,9 @@ El primero crece lineal o cuadrático; el segundo, casi siempre exponencial. El 
 | 6 | Tu red de turnos (Siigo) | red de tiempo, camino = turno, restricción extra, cobertura elástica, contratación | 1 persona, 1 día → 12 personas, 1 semana | generar solo la red factible; listar todos los caminos antes de optimizar |
 | 7 | Secuenciación | disyuntiva, retraso, makespan, big-M débil, cota simple, CP-SAT, intervalos, NoOverlap, indexado en el tiempo | 1 máquina × 4 → 40 trabajos × 5 máquinas; 8 → 80 proyectos con barcos | elegir MILP o CP; precalcular costos por día y generar solo inicios factibles |
 | 8 | Incertidumbre | escenarios, valor esperado, error del promedio, estocástica de 2 etapas, EVPI, VSS, Monte Carlo, SAA, intervalo de confianza, simulación de eventos | 1 parque con 3 escenarios → 3 bases × 4 parques con 1.000 escenarios; muelles | evaluar fuera de la muestra; subir escenarios hasta que el plan no cambie |
-| 9 | Heurísticas | greedy, simulated annealing, warm start, límite de tiempo | 10 → 200 trabajos | comparar contra el óptimo |
-| 10 | Varias metas | ponderado, lexicográfico, Pareto | cartera simulada | resolver en secuencia |
+| 9 | Heurísticas | reglas de prioridad (EDD, WSPT, ATC), vecindad, búsqueda local, óptimo local, recocido simulado, warm start, cota y gap | 8 → 200 trabajos en una máquina | cadena regla → búsqueda local → SA → solver con pista; reportar varias semillas |
+| 10 | Varias metas | dominancia, frontera de Pareto, ponderado, punto no soportado, lexicográfico, ε-constraint, proteger metas, min-max | 8 proyectos → 1.200 clientes × 22 asesores | resolver en secuencia; recorrer la frontera; un piso por cada meta que importa |
 | 11 | ML + optimización | predict-then-optimize, fuga de datos, GroupKFold, baseline, error por tramo, cuantil, calibración conformal, costo de la decisión | 3 → 640 turbinas | escenarios desde los errores de validación; costo esperado precalculado |
 
-Listas: lección 1 (`01_primer_modelo.ipynb`), lección 2 (`02_precio_sombra.ipynb`), lección 3 (`03_decisiones_si_no.ipynb`), lección 4 (`04_asignacion.ipynb`) lecciones 5 y 6 juntas (`05_redes_y_turnos.ipynb`), lección 7 (`06_secuenciacion.ipynb`), lección 8 (`07_incertidumbre.ipynb`) y lección 11 (`10_ml_y_optimizacion.ipynb`).
-Faltan las lecciones 9 (`08_...`) y 10 (`09_...`). La 11 se adelantó en el calendario; su archivo ya tiene su número.
+Listas: lección 1 (`01_primer_modelo.ipynb`), lección 2 (`02_precio_sombra.ipynb`), lección 3 (`03_decisiones_si_no.ipynb`), lección 4 (`04_asignacion.ipynb`) lecciones 5 y 6 juntas (`05_redes_y_turnos.ipynb`), lección 7 (`06_secuenciacion.ipynb`), lección 8 (`07_incertidumbre.ipynb`), lección 9 (`08_heuristicas.ipynb`), lección 10 (`09_varias_metas.ipynb`) y lección 11 (`10_ml_y_optimizacion.ipynb`).
+La ruta está completa.

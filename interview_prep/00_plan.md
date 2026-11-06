@@ -67,7 +67,7 @@ Desde el 27 de octubre sigues la ruta de `notebooks/README.md`: una lección por
 | Mié 4 | L7: secuenciación (máquinas y barcos) | `notebooks/06_secuenciacion.ipynb`, `python/jobshop_cpsat.py`, `08_modelos_sector.md` |
 | Jue 5 → Vie 6 | L8: incertidumbre (simulación y escenarios). No se hizo el jueves: pasa al viernes | `notebooks/07_incertidumbre.ipynb`, `python/simulation_scenarios.py` |
 | Vie 6 | L11: ML + optimización (RUL → mantenimiento) | `notebooks/10_ml_y_optimizacion.ipynb`, `python/rul_maintenance.py` |
-| Sáb 7 (4 h) | L9: heurísticas contra el óptimo + L10: varias metas (ponderado, lexicográfico, Pareto) | `python/sa_scheduling.py`, `python/cartera_simulada.py`, `07_conceptos.md` §2–5 |
+| Sáb 7 (4 h) | L9: heurísticas contra el óptimo + L10: varias metas (ponderado, lexicográfico, Pareto) | `notebooks/08_heuristicas.ipynb`, `notebooks/09_varias_metas.ipynb`, `07_conceptos.md` §2–5 |
 | Dom 8 (4 h) | ML, estadística y producción + Python/SQL cronometrado | `03_question_bank.md` §B–D, `04_coding_drills.md` |
 | Lun 9 | Simulacro único: formulación en vivo + ML + contexto del sector | `05_sector.md` |
 | Mar 10 | Repaso ligero, STAR en voz alta. Dormir bien | `01_star_stories.md` |
