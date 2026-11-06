@@ -12,8 +12,9 @@ Este repo tiene su ruta de estudio: lecciones en notebooks (`notebooks/`) y mate
   Y su trabajo: Siigo (red de turnos), Banco Agrario (asignación de cartera), Ajover (planeación).
 - Ejemplos del sector energía: parques eólicos en el Báltico, subestaciones, cartera de proyectos, precios nodales.
 
-## Estado al 4 nov 2026
-- **Rama de trabajo: `claude/optimistic-lovelace-e8kk6a`.** Parte de `claude/clever-cray-8tywgt` (lecciones 1 a 6) y agrega la L7 (`06_secuenciacion.ipynb`).
+## Estado al 6 nov 2026
+- **Rama de trabajo: `claude/optimistic-lovelace-e8kk6a`.** Parte de `claude/clever-cray-8tywgt` (lecciones 1 a 6) y agrega la L7 (`06_secuenciacion.ipynb`),
+  la L8 (`07_incertidumbre.ipynb`) y la L11 (`10_ml_y_optimizacion.ipynb`).
   Todavía no tiene PR. Reemplaza a `claude/clever-cray-8tywgt`, `claude/affectionate-planck-x31ic6` (L3) y `claude/nifty-volta-o9qira` (L4): no abrir PR de esas.
 - `master` tiene las lecciones 1 y 2.
 - Calendario vigente: `interview_prep/00_plan.md` §3. Lo que falta:
@@ -21,13 +22,15 @@ Este repo tiene su ruta de estudio: lecciones en notebooks (`notebooks/`) y mate
 | Fecha | Qué | Notebook / apoyo |
 |---|---|---|
 | Mié 4 nov | L7: secuenciación (máquinas y barcos) | **hecho**: `notebooks/06_secuenciacion.ipynb` |
-| Jue 5 | L8: incertidumbre (Monte Carlo, escenarios, estocástica de 2 etapas) | crear `notebooks/07_incertidumbre.ipynb`; `python/simulation_scenarios.py` |
-| Vie 6 | L11: ML + optimización (RUL → mantenimiento) | `python/rul_maintenance.py` |
-| Sáb 7 | L9 heurísticas + L10 varias metas | `python/sa_scheduling.py`, `python/cartera_simulada.py` |
+| Jue 5 → Vie 6 | L8: incertidumbre (Monte Carlo, escenarios, estocástica de 2 etapas) | **creado el 6 nov**: `notebooks/07_incertidumbre.ipynb` |
+| Vie 6 | L11: ML + optimización (RUL → mantenimiento) | **creado el 6 nov**: `notebooks/10_ml_y_optimizacion.ipynb` |
+| Sáb 7 | L9 heurísticas + L10 varias metas | crear `notebooks/08_heuristicas.ipynb` y `09_varias_metas.ipynb`; `python/sa_scheduling.py`, `python/cartera_simulada.py` |
 | Dom 8 | ML, estadística, producción + Python/SQL cronometrado | `interview_prep/03_question_bank.md`, `04_coding_drills.md` |
 | Lun 9 | Simulacro único (formulación en vivo + ML + sector) | `interview_prep/05_sector.md` |
 
-- Lecciones 5 y 6 van juntas en `05_redes_y_turnos.ipynb`. Por eso el número del archivo va uno atrás: L7 = `06_...`, L8 = `07_...`.
+- Lecciones 5 y 6 van juntas en `05_redes_y_turnos.ipynb`. Por eso el número del archivo va uno atrás: L7 = `06_...`, L8 = `07_...`, L9 = `08_...`, L10 = `09_...`, L11 = `10_...`.
+- La L8 usa la red de la L5 (bases Wladyslawowo, Leba, Ustka; `parque_1` a `parque_4`). La L11 enlaza con la L8: escenarios desde los errores de validación.
+- La L11 necesita `scikit-learn` (Colab ya lo trae). La simulación de muelles de la L8 está escrita a mano con numpy, sin SimPy.
 - **OR-Tools y HiGHS:** `ortools` trae su propio HiGHS y choca con `highspy` 1.15 (`undefined symbol`). En notebooks que usan los dos: `%pip install -q pyomo "highspy==1.14.0" "ortools==9.15.6755"`.
 - **Límite de tiempo en Pyomo:** `SOLVER.solve(m, timelimit=10)`. Con la interfaz `SolverFactory("appsi_highs")`, `solve` sobrescribe `solver.config.time_limit`.
 - Por confirmar con Andrés (en `interview_prep/09_red_siigo.md`): ventanas exactas de descanso y tamaño real del modelo de Siigo (personas, nodos, arcos, tiempo).
@@ -48,7 +51,7 @@ Este repo tiene su ruta de estudio: lecciones en notebooks (`notebooks/`) y mate
 - La sensibilidad en un MILP se hace por re-solve, no con precios sombra.
 
 ## Verificar antes de subir
-1. `pip install pyomo "highspy==1.14.0" "ortools==9.15.6755" networkx scipy matplotlib nbconvert ipykernel`
+1. `pip install pyomo "highspy==1.14.0" "ortools==9.15.6755" networkx scipy matplotlib scikit-learn nbconvert ipykernel`
 2. Ejecutar cada notebook tocado: `jupyter nbconvert --to notebook --execute notebooks/<x>.ipynb --output-dir <scratchpad> --ExecutePreprocessor.timeout=900`.
    El repo guarda los notebooks **sin salidas**.
 3. Validar cada fórmula con KaTeX (`npm install katex`, `katex.renderToString(tex, {throwOnError: true})`).

@@ -65,8 +65,8 @@ Desde el 27 de octubre sigues la ruta de `notebooks/README.md`: una lección por
 |---|---|---|
 | Mar 3 nov | L5 + L6: redes y tu red de turnos de Siigo | `notebooks/05_redes_y_turnos.ipynb`, `09_red_siigo.md`, `diagramas/red_turnos_siigo.png` |
 | Mié 4 | L7: secuenciación (máquinas y barcos) | `notebooks/06_secuenciacion.ipynb`, `python/jobshop_cpsat.py`, `08_modelos_sector.md` |
-| Jue 5 | L8: incertidumbre (simulación y escenarios) | `python/simulation_scenarios.py` |
-| Vie 6 | L11: ML + optimización (RUL → mantenimiento) | `python/rul_maintenance.py` |
+| Jue 5 → Vie 6 | L8: incertidumbre (simulación y escenarios). No se hizo el jueves: pasa al viernes | `notebooks/07_incertidumbre.ipynb`, `python/simulation_scenarios.py` |
+| Vie 6 | L11: ML + optimización (RUL → mantenimiento) | `notebooks/10_ml_y_optimizacion.ipynb`, `python/rul_maintenance.py` |
 | Sáb 7 (4 h) | L9: heurísticas contra el óptimo + L10: varias metas (ponderado, lexicográfico, Pareto) | `python/sa_scheduling.py`, `python/cartera_simulada.py`, `07_conceptos.md` §2–5 |
 | Dom 8 (4 h) | ML, estadística y producción + Python/SQL cronometrado | `03_question_bank.md` §B–D, `04_coding_drills.md` |
 | Lun 9 | Simulacro único: formulación en vivo + ML + contexto del sector | `05_sector.md` |
