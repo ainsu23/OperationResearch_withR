@@ -12,7 +12,7 @@ Este repo tiene su ruta de estudio: lecciones en notebooks (`notebooks/`) y mate
   Y su trabajo: Siigo (red de turnos), Banco Agrario (asignación de cartera), Ajover (planeación).
 - Ejemplos del sector energía: parques eólicos en el Báltico, subestaciones, cartera de proyectos, precios nodales.
 
-## Estado al 6 nov 2026
+## Estado al 7 nov 2026
 - **Rama de trabajo: `claude/optimistic-lovelace-e8kk6a`.** Parte de `claude/clever-cray-8tywgt` (lecciones 1 a 6) y agrega la L7 (`06_secuenciacion.ipynb`),
   la L8 (`07_incertidumbre.ipynb`), la L9 (`08_heuristicas.ipynb`), la L10 (`09_varias_metas.ipynb`) y la L11 (`10_ml_y_optimizacion.ipynb`). Las 11 lecciones están creadas.
   Todavía no tiene PR. Reemplaza a `claude/clever-cray-8tywgt`, `claude/affectionate-planck-x31ic6` (L3) y `claude/nifty-volta-o9qira` (L4): no abrir PR de esas.
@@ -22,9 +22,8 @@ Este repo tiene su ruta de estudio: lecciones en notebooks (`notebooks/`) y mate
 | Fecha | Qué | Notebook / apoyo |
 |---|---|---|
 | Mié 4 nov | L7: secuenciación (máquinas y barcos) | **hecho**: `notebooks/06_secuenciacion.ipynb` |
-| Jue 5 → Vie 6 | L8: incertidumbre (Monte Carlo, escenarios, estocástica de 2 etapas) | **creado el 6 nov**: `notebooks/07_incertidumbre.ipynb` |
-| Vie 6 | L11: ML + optimización (RUL → mantenimiento) | **creado el 6 nov**: `notebooks/10_ml_y_optimizacion.ipynb` |
-| Sáb 7 | L9 heurísticas + L10 varias metas | **creados el 6 nov**: `notebooks/08_heuristicas.ipynb` y `09_varias_metas.ipynb` |
+| Sáb 7 (6 h 30) | L8 → L11 → L9 → L10. La L8 y la L11 pasaron del jueves y el viernes a hoy | `07_incertidumbre`, `10_ml_y_optimizacion`, `08_heuristicas`, `09_varias_metas` (todos creados el 6 nov) |
+| | Si no alcanza el sábado | la sección 6 de la L10 pasa al domingo a primera hora |
 | Dom 8 | ML, estadística, producción + Python/SQL cronometrado | `interview_prep/03_question_bank.md`, `04_coding_drills.md` |
 | Lun 9 | Simulacro único (formulación en vivo + ML + sector) | `interview_prep/05_sector.md` |
 

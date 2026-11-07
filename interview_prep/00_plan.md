@@ -40,7 +40,7 @@ Supuesto: ~2 h entre semana, ~4 h fin de semana.
 - Despliegue de un optimizador como servicio.
 - Contexto del sector y de la empresa.
 
-## 3. Calendario (actualizado el 3 nov)
+## 3. Calendario (actualizado el 7 nov)
 El 26 de octubre fue lunes. La entrevista es el **miércoles 11 de noviembre**.
 
 Desde el 27 de octubre sigues la ruta de `notebooks/README.md`: una lección por día, de modelos pequeños a grandes.
@@ -50,6 +50,17 @@ Desde el 27 de octubre sigues la ruta de `notebooks/README.md`: una lección por
 - L11 (ML + optimización) sube al viernes y tiene un día completo: es la brecha más grande.
 - L9 y L10 van juntas el sábado: ya tienes los scripts.
 - Los 2 simulacros quedan en 1.
+
+**Ajuste del 7 nov.** La L8 y la L11 pasan del viernes al sábado. Hoy van las 4 lecciones que faltan (unas 6 h 30), en este orden:
+
+| Bloque | Lección | Notebook | Tiempo |
+|---|---|---|---|
+| 1 | L8: incertidumbre (escenarios, 2 etapas, Monte Carlo, simulación) | `notebooks/07_incertidumbre.ipynb` | 1 h 45 |
+| 2 | L11: ML + optimización (RUL → mantenimiento). Es la brecha más grande y usa la L8 | `notebooks/10_ml_y_optimizacion.ipynb` | 1 h 45 |
+| 3 | L9: heurísticas contra el óptimo | `notebooks/08_heuristicas.ipynb` | 1 h 30 |
+| 4 | L10: varias metas (ponderado, lexicográfico, Pareto) | `notebooks/09_varias_metas.ipynb` | 1 h 30 |
+
+Si no alcanza: la sección 6 de la L10 (la cartera de Banco Agrario, que ya conoces) pasa al domingo a primera hora. Lo demás de hoy no se mueve.
 
 ### Hecho
 | Fecha | Lección o bloque |
@@ -65,9 +76,7 @@ Desde el 27 de octubre sigues la ruta de `notebooks/README.md`: una lección por
 |---|---|---|
 | Mar 3 nov | L5 + L6: redes y tu red de turnos de Siigo | `notebooks/05_redes_y_turnos.ipynb`, `09_red_siigo.md`, `diagramas/red_turnos_siigo.png` |
 | Mié 4 | L7: secuenciación (máquinas y barcos) | `notebooks/06_secuenciacion.ipynb`, `python/jobshop_cpsat.py`, `08_modelos_sector.md` |
-| Jue 5 → Vie 6 | L8: incertidumbre (simulación y escenarios). No se hizo el jueves: pasa al viernes | `notebooks/07_incertidumbre.ipynb`, `python/simulation_scenarios.py` |
-| Vie 6 | L11: ML + optimización (RUL → mantenimiento) | `notebooks/10_ml_y_optimizacion.ipynb`, `python/rul_maintenance.py` |
-| Sáb 7 (4 h) | L9: heurísticas contra el óptimo + L10: varias metas (ponderado, lexicográfico, Pareto) | `notebooks/08_heuristicas.ipynb`, `notebooks/09_varias_metas.ipynb`, `07_conceptos.md` §2–5 |
+| Sáb 7 (6 h 30) | L8 → L11 → L9 → L10 (ver el ajuste del 7 nov). La L8 y la L11 vienen del jueves y el viernes | `notebooks/07_incertidumbre.ipynb`, `10_ml_y_optimizacion.ipynb`, `08_heuristicas.ipynb`, `09_varias_metas.ipynb`; apoyo: `07_conceptos.md` §2–5 |
 | Dom 8 (4 h) | ML, estadística y producción + Python/SQL cronometrado | `03_question_bank.md` §B–D, `04_coding_drills.md` |
 | Lun 9 | Simulacro único: formulación en vivo + ML + contexto del sector | `05_sector.md` |
 | Mar 10 | Repaso ligero, STAR en voz alta. Dormir bien | `01_star_stories.md` |
