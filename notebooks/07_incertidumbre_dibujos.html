@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Incertidumbre en dibujos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: una columna de lectura, como un cuaderno de taller; cada restricción es un dibujo con su regla debajo. */
+:root {
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --fg: #18202b;
+  --muted: #5d6878;
+  --line: #c8d0da;
+  --accent: #d4462f;      /* retraso, prohibido */
+  --ok: #2b8a57;          /* permitido */
+  --day-bad: #d7dce3;     /* mal tiempo */
+  --j1: #6f9fe6; --j2: #efc15a; --j3: #5cc2b3; --j4: #b48ae0; --j5: #a8c46a;
+  --faint: #e3e8ee;
+  --on-bar: #121820;
+  --display: "Archivo", "Arial Narrow", Arial, sans-serif;
+  --body: "Source Sans 3", "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12161c; --surface: #1a2029; --fg: #e7ebf1; --muted: #9ba6b5; --line: #343d4a;
+    --accent: #ff6d55; --ok: #4fc58c; --day-bad: #2c333d; --faint: #232a34;
+    --j1: #7aa8ee; --j2: #f2c768; --j3: #66cbbd; --j4: #bf98ea; --j5: #b3cf74;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12161c; --surface: #1a2029; --fg: #e7ebf1; --muted: #9ba6b5; --line: #343d4a;
+  --accent: #ff6d55; --ok: #4fc58c; --day-bad: #2c333d; --faint: #232a34;
+  --j1: #7aa8ee; --j2: #f2c768; --j3: #66cbbd; --j4: #bf98ea; --j5: #b3cf74;
+  color-scheme: dark;
+}
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 17px; line-height: 1.55; }
+.wrap { max-width: 760px; margin: 0 auto; padding-block: 32px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 18px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; line-height: 1.15; margin: 0; }
+h1 { font-size: clamp(30px, 6vw, 44px); font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: 26px; font-weight: 800; margin-top: 28px; padding-top: 18px; border-top: 2px solid var(--fg); }
+h3 { font-size: 19px; font-weight: 600; margin-top: 8px; }
+p, ul, ol { margin: 0; max-width: 65ch; }
+ul, ol { padding-left: 22px; display: flex; flex-direction: column; gap: 4px; }
+.lead { font-size: 19px; color: var(--muted); }
+.tag { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+code, .f { font-family: var(--mono); font-size: 0.88em; }
+.f { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; white-space: nowrap; }
+.rule { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--fg); border-radius: 4px; padding: 12px 16px; display: flex; flex-direction: column; gap: 6px; max-width: 65ch; }
+.rule .f { background: var(--bg); }
+.rule b { font-family: var(--display); font-weight: 600; }
+.ana { color: var(--muted); font-style: italic; }
+figure { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.fig { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+figure svg { display: block; width: 100%; min-width: 520px; height: auto; color: var(--fg); font-family: var(--mono); }
+figcaption { font-size: 15px; color: var(--muted); max-width: 65ch; }
+table { border-collapse: collapse; font-size: 15px; width: 100%; }
+.tbl { overflow-x: auto; }
+th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--display); font-weight: 600; font-size: 14px; }
+td.n { font-variant-numeric: tabular-nums; }
+.late { color: var(--accent); font-weight: 600; }
+.okc { color: var(--ok); font-weight: 600; }
+/* clases del dibujo */
+.ax { stroke: currentColor; stroke-width: 1; fill: none; }
+.tick { stroke: currentColor; stroke-width: 1; }
+.t { fill: currentColor; font-size: 12px; }
+.ts { fill: var(--muted); font-size: 11px; }
+.tb { fill: var(--on-bar); font-size: 11px; font-weight: 600; }
+.ta { fill: var(--accent); font-size: 12px; font-weight: 600; }
+.tok { fill: var(--ok); font-size: 12px; font-weight: 600; }
+.b1 { fill: var(--j1); } .b2 { fill: var(--j2); } .b3 { fill: var(--j3); } .b4 { fill: var(--j4); } .b5 { fill: var(--j5); }
+.bf { fill: var(--faint); stroke: var(--line); }
+.due { stroke: currentColor; stroke-width: 1.4; stroke-dasharray: 3 3; }
+.lateb { fill: var(--accent); }
+.wall { stroke: var(--accent); stroke-width: 3; }
+.off { stroke: var(--muted); stroke-width: 2; stroke-dasharray: 5 4; }
+.bad { fill: var(--day-bad); }
+.okf { fill: var(--ok); }
+.okl { stroke: var(--ok); stroke-width: 2; fill: none; }
+.al { stroke: var(--accent); stroke-width: 2; fill: none; }
+.chip { fill: var(--surface); stroke-width: 2; }
+.s1 { stroke: var(--j1); } .s2 { stroke: var(--j2); } .s3 { stroke: var(--j3); } .s4 { stroke: var(--j4); } .s5 { stroke: var(--j5); }
+.node { fill: var(--surface); stroke: currentColor; stroke-width: 1.4; }
+.edge { stroke: var(--muted); stroke-width: 1.4; }
+.band { fill: var(--accent); opacity: 0.12; }
+.hl { fill: none; stroke: var(--accent); stroke-width: 2.5; }
+@media (max-width: 480px) { body { font-size: 16px; } h2 { font-size: 22px; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:10px">
+    <span class="tag">Lección 8 · notebook 07_incertidumbre.ipynb</span>
+    <h1>Incertidumbre en dibujos</h1>
+    <p class="lead">Hasta la lección 7 todo era dato: duraciones, clima, multas. Hoy los datos tienen varios valores posibles. Aquí van las mismas cuentas del notebook, con un dibujo por idea.</p>
+    <p>Cómo usarlo: lee una sección aquí y después corre la misma sección en el notebook. Cada título dice a qué sección corresponde.</p>
+  </header>
+
+  <h2>La idea en una frase</h2>
+  <p><b>Decides hoy sin saber qué va a pasar. Mañana, cuando ya sabes, corriges lo que puedas, y corregir cuesta caro.</b></p>
+  <p class="ana">La babcia y los pierogi de Wigilia. Amasa en la mañana sin saber si vienen los primos de Gdańsk. Si faltan, alguien corre al Żabka a última hora: caro. Si sobran, se congelan. Amasar es la primera etapa. Correr al Żabka es la segunda etapa, el "recurso".</p>
+
+  <!-- ============ 2 ============ -->
+  <h2>1. Repuestos para el invierno <span class="tag">notebook §2</span></h2>
+  <p>En octubre decides cuántos <b>módulos convertidores</b> compras para el parque eólico. Cada uno cuesta <b>40.000 €</b>. Si en el invierno falla un módulo y no hay repuesto, se trae de urgencia: <b>250.000 €</b>.</p>
+  <p>Nadie sabe cómo será el invierno. Hay 3 <b>escenarios</b>, cada uno con su probabilidad:</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Escenario</th><th>Probabilidad</th><th>Fallas</th></tr></thead>
+    <tbody>
+      <tr><td>suave</td><td class="n">0,4</td><td class="n">0</td></tr>
+      <tr><td>normal</td><td class="n">0,4</td><td class="n">2</td></tr>
+      <tr><td>duro</td><td class="n">0,2</td><td class="n">6</td></tr>
+    </tbody>
+  </table></div>
+  <p>El promedio es 0,4·0 + 0,4·2 + 0,2·6 = <b>2 fallas</b>. La tentación: comprar 2.</p>
+
+  <h3>El costo de un plan es un promedio de escenarios</h3>
+  <p>Un plan (comprar <code>q</code> módulos) tiene un costo distinto en cada invierno. El <b>costo esperado</b> los promedia, pesando por la probabilidad.</p>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 300" role="img" aria-label="Con 2 módulos, el invierno duro cuesta 1.080.000 euros y el costo esperado es 280.000. Con 6 módulos, cada invierno cuesta 240.000 y el esperado es 240.000.">
+      <text class="t" x="40" y="18" font-weight="600">Compro 2 (el promedio)</text>
+      <rect class="b1" x="40" y="225.6" width="104" height="14.4"/>
+      <rect class="b1" x="144" y="225.6" width="104" height="14.4"/>
+      <rect class="b1" x="248" y="225.6" width="52" height="14.4"/>
+      <rect class="lateb" x="248" y="45.6" width="52" height="180"/>
+      <text class="t" x="92" y="219" text-anchor="middle">80 mil</text>
+      <text class="t" x="196" y="219" text-anchor="middle">80 mil</text>
+      <text class="ta" x="274" y="39" text-anchor="middle">1.080 mil</text>
+      <text class="tb" x="274" y="140" text-anchor="middle" fill="#fff" style="fill:#fff">4 urg.</text>
+      <line class="ax" x1="40" y1="240" x2="300" y2="240"/>
+      <text class="ts" x="92" y="256" text-anchor="middle">suave · 0,4</text>
+      <text class="ts" x="196" y="256" text-anchor="middle">normal · 0,4</text>
+      <text class="ts" x="274" y="256" text-anchor="middle">duro</text>
+      <text class="ts" x="274" y="270" text-anchor="middle">0,2</text>
+      <text class="ta" x="40" y="292">área total = 280.000 €</text>
+
+      <text class="t" x="330" y="18" font-weight="600">Compro 6</text>
+      <rect class="b1" x="330" y="196.8" width="104" height="43.2"/>
+      <rect class="b1" x="434" y="196.8" width="104" height="43.2"/>
+      <rect class="b1" x="538" y="196.8" width="52" height="43.2"/>
+      <text class="t" x="382" y="190" text-anchor="middle">240 mil</text>
+      <text class="t" x="486" y="190" text-anchor="middle">240 mil</text>
+      <text class="t" x="564" y="190" text-anchor="middle">240 mil</text>
+      <line class="ax" x1="330" y1="240" x2="590" y2="240"/>
+      <text class="ts" x="382" y="256" text-anchor="middle">suave · 0,4</text>
+      <text class="ts" x="486" y="256" text-anchor="middle">normal · 0,4</text>
+      <text class="ts" x="564" y="256" text-anchor="middle">duro</text>
+      <text class="ts" x="564" y="270" text-anchor="middle">0,2</text>
+      <text class="tok" x="330" y="292">área total = 240.000 €</text>
+    </svg>
+    </div>
+    <figcaption>El ancho de cada bloque es la probabilidad; la altura, lo que cuesta ese invierno. El <b>área</b> es el costo esperado. Azul = compra en octubre, rojo = urgencias. Con 2 módulos, el invierno duro (solo 20 %) pesa tanto que el plan barato sale caro: 0,2 × 1.080.000 = 216.000 € de los 280.000.</figcaption>
+  </figure>
+
+  <h3>Fuerza bruta: probar de 0 a 8 módulos</h3>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 250" role="img" aria-label="Costo esperado según los módulos comprados: baja de 500.000 con 0 hasta 240.000 con 6, y sube después. Con 2 cuesta 280.000.">
+      <line class="ax" x1="70" y1="220" x2="540" y2="220"/>
+      <line class="ax" x1="70" y1="30" x2="70" y2="220"/>
+      <g class="ts" text-anchor="end"><text x="62" y="224">0</text><text x="62" y="152">200</text><text x="62" y="80">400</text></g>
+      <line class="tick" x1="66" y1="148" x2="70" y2="148"/><line class="tick" x1="66" y1="76" x2="70" y2="76"/>
+      <text class="ts" x="62" y="24" text-anchor="end">mil €</text>
+      <polyline fill="none" stroke="currentColor" stroke-width="2" points="80,40 135,79.6 190,119.2 245,122.8 300,126.4 355,130 410,133.6 465,119.2 520,104.8"/>
+      <g fill="currentColor"><circle cx="80" cy="40" r="3.5"/><circle cx="135" cy="79.6" r="3.5"/><circle cx="245" cy="122.8" r="3.5"/><circle cx="300" cy="126.4" r="3.5"/><circle cx="355" cy="130" r="3.5"/><circle cx="465" cy="119.2" r="3.5"/><circle cx="520" cy="104.8" r="3.5"/></g>
+      <circle cx="190" cy="119.2" r="6" class="lateb"/>
+      <text class="ta" x="190" y="104" text-anchor="middle">el promedio: 280 mil</text>
+      <circle cx="410" cy="133.6" r="6" class="okf"/>
+      <text class="tok" x="410" y="160" text-anchor="middle">el mejor: 240 mil</text>
+      <g class="ts" text-anchor="middle"><text x="80" y="236">0</text><text x="135" y="236">1</text><text x="190" y="236">2</text><text x="245" y="236">3</text><text x="300" y="236">4</text><text x="355" y="236">5</text><text x="410" y="236">6</text><text x="465" y="236">7</text><text x="520" y="236">8</text></g>
+      <text class="ts" x="560" y="236">módulos</text>
+    </svg>
+    </div>
+    <figcaption>De 2 a 6, cada módulo extra baja el costo esperado 10.000 €. El séptimo ya sobra seguro: sube 40.000 €.</figcaption>
+  </figure>
+
+  <h3>La regla del módulo número k</h3>
+  <p>¿Por qué 6? Mira cada módulo por separado. El módulo número k <b>se usa</b> solo si hay k fallas o más. Si se usa, ahorra una urgencia de 250.000 €. Vale la pena si lo que ahorra en promedio supera lo que cuesta:</p>
+  <div class="rule"><span><span class="f">P(fallas ≥ k) · 250.000 &gt; 40.000</span>, o sea <span class="f">P(fallas ≥ k) &gt; 16 %</span></span></div>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 220" role="img" aria-label="Lo que ahorra en promedio cada módulo: los dos primeros 150.000, del tercero al sexto 50.000, el séptimo 0. La compra cuesta 40.000, así que se compran 6.">
+      <rect class="okf" x="90" y="55" width="40" height="135" opacity="0.8"/>
+      <rect class="okf" x="155" y="55" width="40" height="135" opacity="0.8"/>
+      <rect class="okf" x="220" y="145" width="40" height="45" opacity="0.8"/>
+      <rect class="okf" x="285" y="145" width="40" height="45" opacity="0.8"/>
+      <rect class="okf" x="350" y="145" width="40" height="45" opacity="0.8"/>
+      <rect class="okf" x="415" y="145" width="40" height="45" opacity="0.8"/>
+      <g class="t" text-anchor="middle"><text x="110" y="49">150</text><text x="175" y="49">150</text><text x="240" y="139">50</text><text x="305" y="139">50</text><text x="370" y="139">50</text><text x="435" y="139">50</text><text x="500" y="184">0</text></g>
+      <line class="wall" x1="80" y1="154" x2="530" y2="154" stroke-dasharray="6 4" stroke-width="2"/>
+      <text class="ta" x="530" y="148" text-anchor="end">cuesta 40</text>
+      <line class="ax" x1="80" y1="190" x2="530" y2="190"/>
+      <g class="ts" text-anchor="middle"><text x="110" y="206">k = 1</text><text x="175" y="206">2</text><text x="240" y="206">3</text><text x="305" y="206">4</text><text x="370" y="206">5</text><text x="435" y="206">6</text><text x="500" y="206">7</text></g>
+      <text class="ts" x="80" y="20">ahorro esperado de cada módulo (mil €) = P(fallas ≥ k) × 250</text>
+    </svg>
+    </div>
+    <figcaption>Los módulos 1 y 2 se usan en el invierno normal y en el duro (60 %). Del 3 al 6, solo en el duro (20 %): 0,2 × 250.000 = 50.000 €, todavía más que los 40.000 que cuestan. El 7 nunca se usa. Este es el problema del <b>vendedor de periódicos</b> (<i>newsvendor</i>).</figcaption>
+  </figure>
+
+  <h3>El error del promedio</h3>
+  <p>Si planeas con "el invierno trae 2 fallas", el modelo compra 2 y te promete <b>80.000 €</b> (2 compras, cero urgencias). En la realidad ese plan cuesta <b>280.000 €</b> esperados: 3,5 veces lo prometido.</p>
+  <p>Se llama <b><i>flaw of averages</i></b>: el costo del plan hecho con el promedio <b>no es</b> el promedio de los costos. Pasa siempre que el costo es asimétrico: que falte uno cuesta 250.000; que sobre uno, 40.000.</p>
+
+  <h3>En notación: el árbol de 2 etapas</h3>
+  <div class="rule">
+    <span><b>Objetivo:</b> <span class="f">min 40.000·q + Σ_s π_s · 250.000 · e_s</span></span>
+    <span><b>Restricción:</b> <span class="f">q + e_s ≥ D_s</span> para cada escenario s</span>
+    <span>q = módulos que compro hoy. e_s = urgencias en el escenario s. π_s = probabilidad. D_s = fallas.</span>
+  </div>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 230" role="img" aria-label="Árbol de dos etapas con q igual a 2: hoy se decide q, que vale lo mismo en los tres inviernos. En cada invierno, las urgencias e completan lo que falta: 0, 0 y 4.">
+      <rect class="chip" x="20" y="92" width="130" height="46" rx="8" stroke="currentColor"/>
+      <text class="t" x="85" y="111" text-anchor="middle" font-weight="600">Hoy: q = 2</text>
+      <text class="ts" x="85" y="127" text-anchor="middle">1ª etapa</text>
+      <line class="ax" x1="150" y1="115" x2="250" y2="45"/>
+      <line class="ax" x1="150" y1="115" x2="250" y2="115"/>
+      <line class="ax" x1="150" y1="115" x2="250" y2="185"/>
+      <text class="ts" x="200" y="214" text-anchor="middle">el invierno se revela</text>
+      <text class="t" x="258" y="49">suave · 0,4</text>
+      <text class="t" x="258" y="119">normal · 0,4</text>
+      <text class="t" x="258" y="189">duro · 0,2</text>
+      <rect class="b1" x="380" y="34" width="50" height="20"/><text class="tb" x="405" y="48" text-anchor="middle">q</text>
+      <line class="due" x1="380" y1="28" x2="380" y2="60"/>
+      <text class="ts" x="440" y="48">D = 0 · e = 0 (sobran 2)</text>
+      <rect class="b1" x="380" y="104" width="50" height="20"/><text class="tb" x="405" y="118" text-anchor="middle">q</text>
+      <line class="due" x1="430" y1="98" x2="430" y2="130"/>
+      <text class="ts" x="440" y="118">D = 2 · e = 0</text>
+      <rect class="b1" x="380" y="174" width="50" height="20"/><text class="tb" x="405" y="188" text-anchor="middle">q</text>
+      <rect class="lateb" x="430" y="174" width="100" height="20"/><text class="tb" x="480" y="188" text-anchor="middle" style="fill:#fff">e = 4</text>
+      <line class="due" x1="530" y1="168" x2="530" y2="200"/>
+      <text class="ts" x="536" y="188">D = 6</text>
+      <text class="ts" x="20" y="18">azul = q (comprado hoy) · rojo = e (urgencias) · punteada = fallas D</text>
+    </svg>
+    </div>
+    <figcaption>La clave está en los índices. <code>q</code> no lleva <code>s</code>: es <b>una</b> decisión, igual en los tres inviernos (no puedes comprar sabiendo el invierno). <code>e_s</code> sí lleva <code>s</code>: cambia con el invierno. La restricción dice que, en cada rama, la barra azul + la roja alcanzan la línea punteada.</figcaption>
+  </figure>
+  <p>En Pyomo: <code>m.q = pyo.Var()</code> sin índice y <code>m.e = pyo.Var(m.S)</code> con índice. El modelo tiene 1 + 3 = 4 variables. Esta forma, con una copia de la segunda etapa por escenario, se llama <b>forma extendida</b>.</p>
+
+  <h3>Dos números para el jefe: EVPI y VSS</h3>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 130" role="img" aria-label="En una recta: saber el futuro cuesta 80.000, el plan de dos etapas 240.000 y el plan del promedio 280.000. EVPI es 160.000 y VSS es 40.000.">
+      <line class="ax" x1="40" y1="70" x2="580" y2="70"/>
+      <circle cx="102" cy="70" r="6" class="okf"/>
+      <circle cx="438" cy="70" r="6" fill="currentColor"/>
+      <circle cx="522" cy="70" r="6" class="lateb"/>
+      <text class="t" x="102" y="40" text-anchor="middle" font-weight="600">WS</text><text class="ts" x="102" y="56" text-anchor="middle">80 mil</text>
+      <text class="t" x="438" y="40" text-anchor="middle" font-weight="600">RP</text><text class="ts" x="438" y="56" text-anchor="middle">240 mil</text>
+      <text class="t" x="522" y="40" text-anchor="middle" font-weight="600">EEV</text><text class="ts" x="522" y="56" text-anchor="middle">280 mil</text>
+      <line class="ax" x1="102" y1="90" x2="438" y2="90"/><line class="ax" x1="102" y1="85" x2="102" y2="95"/><line class="ax" x1="438" y1="85" x2="438" y2="95"/>
+      <text class="t" x="270" y="110" text-anchor="middle">EVPI = 160 mil</text>
+      <line class="al" x1="438" y1="90" x2="522" y2="90"/><line class="al" x1="522" y1="85" x2="522" y2="95"/>
+      <text class="ta" x="480" y="110" text-anchor="middle">VSS = 40 mil</text>
+    </svg>
+    </div>
+    <figcaption>Siempre en este orden: WS ≤ RP ≤ EEV.</figcaption>
+  </figure>
+  <div class="tbl"><table>
+    <thead><tr><th>Sigla</th><th>Qué es</th><th>Aquí</th></tr></thead>
+    <tbody>
+      <tr><td>WS (<i>wait and see</i>)</td><td>sabes el invierno antes de comprar: compras justo las fallas</td><td class="n">80.000 €</td></tr>
+      <tr><td>RP (<i>here and now</i>)</td><td>el plan de 2 etapas: 6 módulos</td><td class="n">240.000 €</td></tr>
+      <tr><td>EEV</td><td>lo que cuesta de verdad el plan hecho con el promedio</td><td class="n">280.000 €</td></tr>
+      <tr><td><b>EVPI</b> = RP − WS</td><td>lo máximo que pagarías por saber el futuro (un pronóstico perfecto)</td><td class="n">160.000 €</td></tr>
+      <tr><td><b>VSS</b> = EEV − RP</td><td>lo que ganas por modelar los escenarios en vez del promedio</td><td class="n">40.000 €</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- ============ 3 ============ -->
+  <h2>2. Monte Carlo: miles de inviernos <span class="tag">notebook §3</span></h2>
+  <p>Tres escenarios son una caricatura. En la realidad, las fallas de un invierno son un número al azar. El equipo de datos te da una <b>receta para sortear inviernos</b>. Monte Carlo es repetir la receta muchas veces: cada sorteo es un escenario.</p>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 150" role="img" aria-label="La receta: primero se sortea el tipo de invierno (suave 50 %, normal 35 %, duro 15 %). Después se sortean las fallas con una Poisson de media 1, 3 o 7. El resultado es un escenario.">
+      <defs><marker id="ma" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+      <text class="t" x="20" y="22" font-weight="600">1. Sortea el invierno</text>
+      <rect class="b3" x="20" y="34" width="105" height="30"/><text class="tb" x="72" y="53" text-anchor="middle">50 %</text><text class="ts" x="72" y="80" text-anchor="middle">suave</text>
+      <rect class="b2" x="125" y="34" width="73" height="30"/><text class="tb" x="161" y="53" text-anchor="middle">35 %</text>
+      <rect class="lateb" x="198" y="34" width="32" height="30"/><text class="tb" x="214" y="53" text-anchor="middle" style="fill:#fff">15 %</text>
+      <text class="ts" x="161" y="80" text-anchor="middle">normal</text><text class="ts" x="214" y="80" text-anchor="middle">duro</text>
+      <line class="ax" x1="240" y1="49" x2="290" y2="49" marker-end="url(#ma)"/>
+      <text class="t" x="300" y="22" font-weight="600">2. Sortea las fallas</text>
+      <text class="t" x="300" y="44">suave → Poisson, media 1</text>
+      <text class="t" x="300" y="62">normal → Poisson, media 3</text>
+      <text class="t" x="300" y="80">duro → Poisson, media 7</text>
+      <line class="ax" x1="300" y1="96" x2="300" y2="116" marker-end="url(#ma)"/>
+      <rect class="chip" x="300" y="120" width="250" height="26" rx="6" stroke="currentColor"/>
+      <text class="t" x="425" y="137" text-anchor="middle">un escenario: (duro, 9 fallas)</text>
+    </svg>
+    </div>
+    <figcaption>Poisson es la distribución de "cuántos eventos raros pasan": 0, 1, 2, … con una media λ. En Python, <code>rng.poisson(lam)</code>. El notebook sortea 200.000 inviernos una vez y los usa como "el mundo real" para medir planes.</figcaption>
+  </figure>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 200" role="img" aria-label="Histograma de 200.000 inviernos: lo más común es 1 falla, la media es 2,6, y la cola llega hasta 21.">
+      <g>
+        <rect class="b1" x="70" y="69.5" width="36" height="100.5"/>
+        <rect class="b1" x="115" y="52" width="36" height="118"/>
+        <rect class="b1" x="160" y="83" width="36" height="87"/>
+        <rect class="b1" x="205" y="111.5" width="36" height="58.5"/>
+        <rect class="b1" x="250" y="130" width="36" height="40"/>
+        <rect class="b1" x="295" y="141.5" width="36" height="28.5"/>
+        <rect class="b1" x="340" y="149.5" width="36" height="20.5"/>
+        <rect class="b1" x="385" y="155.5" width="36" height="14.5"/>
+        <rect class="b1" x="430" y="158.5" width="36" height="11.5"/>
+        <rect class="b1" x="475" y="162" width="36" height="8"/>
+        <rect class="b1" x="520" y="157" width="36" height="13"/>
+      </g>
+      <line class="ax" x1="60" y1="170" x2="566" y2="170"/>
+      <g class="ts" text-anchor="middle"><text x="88" y="186">0</text><text x="133" y="186">1</text><text x="178" y="186">2</text><text x="223" y="186">3</text><text x="268" y="186">4</text><text x="313" y="186">5</text><text x="358" y="186">6</text><text x="403" y="186">7</text><text x="448" y="186">8</text><text x="493" y="186">9</text><text x="538" y="186">10+</text></g>
+      <line class="wall" x1="205" y1="30" x2="205" y2="170" stroke-dasharray="5 4" stroke-width="2"/>
+      <text class="ta" x="211" y="38">media 2,6</text>
+      <text class="ts" x="340" y="70">1 de cada 7 inviernos: 6 fallas o más</text>
+      <text class="ts" x="60" y="20">probabilidad de cada número de fallas</text>
+    </svg>
+    </div>
+    <figcaption>La media es 2,6, pero la cola es larga: el peor de los 200.000 inviernos tuvo 21 fallas. Con la regla del módulo k: P(≥ 5) = 19 % y P(≥ 6) = 14 %. Se compran <b>5</b>.</figcaption>
+  </figure>
+
+  <h3>SAA: resolver con una muestra, medir con otra</h3>
+  <p><b>SAA</b> (<i>sample average approximation</i>): sorteas N inviernos, cada uno con probabilidad 1/N, y resuelves el mismo modelo de 2 etapas. Después mides el plan en el "mundo real" de 200.000 inviernos. Es train y test, en optimización.</p>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 230" role="img" aria-label="Con 10 inviernos el modelo promete 162.000 y el plan cuesta 360.000. Con 100, 270.000 contra 302.000. Desde 1.000, lo prometido y lo real coinciden en unos 298.000.">
+      <line class="ax" x1="60" y1="180" x2="580" y2="180"/>
+      <rect class="bf" x="92" y="118.4" width="34" height="61.6"/><rect class="lateb" x="128" y="43.2" width="34" height="136.8"/>
+      <text class="ts" x="109" y="112" text-anchor="middle">162</text><text class="ta" x="145" y="37" text-anchor="middle">360</text>
+      <rect class="bf" x="212" y="77.4" width="34" height="102.6"/><rect class="lateb" x="248" y="65.2" width="34" height="114.8"/>
+      <text class="ts" x="229" y="71" text-anchor="middle">270</text><text class="ta" x="265" y="59" text-anchor="middle">302</text>
+      <rect class="bf" x="332" y="67.2" width="34" height="112.8"/><rect class="okf" x="368" y="66.8" width="34" height="113.2" opacity="0.85"/>
+      <text class="ts" x="349" y="61" text-anchor="middle">297</text><text class="tok" x="385" y="61" text-anchor="middle">298</text>
+      <rect class="bf" x="452" y="66.2" width="34" height="113.8"/><rect class="okf" x="488" y="66.8" width="34" height="113.2" opacity="0.85"/>
+      <text class="ts" x="469" y="60" text-anchor="middle">299</text><text class="tok" x="505" y="61" text-anchor="middle">298</text>
+      <g class="t" text-anchor="middle"><text x="127" y="198">N = 10</text><text x="247" y="198">N = 100</text><text x="367" y="198">N = 1.000</text><text x="487" y="198">N = 10.000</text></g>
+      <g class="ts" text-anchor="middle"><text x="127" y="214">compra 1 a 4</text><text x="247" y="214">compra 4 a 6</text><text x="367" y="214">compra 5</text><text x="487" y="214">compra 5</text></g>
+      <rect class="bf" x="60" y="12" width="14" height="10"/><text class="ts" x="80" y="21">lo que promete el modelo (mil €)</text>
+      <rect class="lateb" x="300" y="12" width="14" height="10"/><text class="ts" x="320" y="21">lo que cuesta en el mundo real</text>
+    </svg>
+    </div>
+    <figcaption>Promedio de 5 muestras por tamaño. Con 10 inviernos, cada muestra da un plan distinto y el modelo es muy <b>optimista</b>: elige lo que mejor le va a <i>su</i> muestra, como un modelo de ML sobreajustado. Desde 1.000, el plan deja de cambiar y la promesa coincide con la realidad.</figcaption>
+  </figure>
+  <div class="rule"><span><b>Regla práctica:</b> resuelve con N escenarios y evalúa con otros, muchos más. Sube N hasta que el plan deje de cambiar.</span></div>
+
+  <h3>¿Qué tan seguro es un promedio? El intervalo de confianza</h3>
+  <p>El costo de un plan con Monte Carlo es un promedio, y un promedio cambia de una muestra a otra. El intervalo dice entre qué valores está el costo verdadero, con 95 % de confianza:</p>
+  <div class="rule"><span><span class="f">promedio ± 1,96 · desviación / √N</span></span></div>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 190" role="img" aria-label="Intervalos del costo del plan de 5 módulos: con 100 inviernos mide 132.000 euros, con 1.000 mide 40.000, con 10.000 mide 12.000 y con 100.000 mide 4.000.">
+      <g class="t" text-anchor="end"><text x="90" y="44">N = 100</text><text x="90" y="79">1.000</text><text x="90" y="114">10.000</text><text x="90" y="149">100.000</text></g>
+      <line class="ax" x1="99.4" y1="40" x2="547.6" y2="40" stroke-width="2"/><line class="ax" x1="99.4" y1="33" x2="99.4" y2="47"/><line class="ax" x1="547.6" y1="33" x2="547.6" y2="47"/><circle cx="325.5" cy="40" r="4" fill="currentColor"/>
+      <line class="ax" x1="160.6" y1="75" x2="297.7" y2="75" stroke-width="2"/><line class="ax" x1="160.6" y1="68" x2="160.6" y2="82"/><line class="ax" x1="297.7" y1="68" x2="297.7" y2="82"/><circle cx="229" cy="75" r="4" fill="currentColor"/>
+      <line class="ax" x1="202" y1="110" x2="242.6" y2="110" stroke-width="2"/><line class="ax" x1="202" y1="103" x2="202" y2="117"/><line class="ax" x1="242.6" y1="103" x2="242.6" y2="117"/><circle cx="221.5" cy="110" r="4" fill="currentColor"/>
+      <line class="ax" x1="214" y1="145" x2="227" y2="145" stroke-width="2"/><line class="ax" x1="214" y1="138" x2="214" y2="152"/><line class="ax" x1="227" y1="138" x2="227" y2="152"/><circle cx="220.5" cy="145" r="4" fill="currentColor"/>
+      <g class="ts"><text x="306" y="79">ancho 40 mil</text><text x="250" y="114">ancho 12 mil</text><text x="236" y="149">ancho 4 mil</text><text x="440" y="28">ancho 132 mil</text></g>
+      <line class="ax" x1="60" y1="168" x2="570" y2="168"/>
+      <g class="ts" text-anchor="middle"><text x="60" y="183">250</text><text x="230" y="183">300</text><text x="400" y="183">350</text><text x="570" y="183">400 mil €</text></g>
+    </svg>
+    </div>
+    <figcaption>Cada ×10 en N divide el ancho por √10 ≈ 3,2. Con 100 inviernos el intervalo mide 132.000 €: no sirve para comparar planes que se separan por 10.000 €.</figcaption>
+  </figure>
+
+  <!-- ============ 4 ============ -->
+  <h2>3. Simulación: los muelles de Łeba <span class="tag">notebook §4</span></h2>
+  <p>Llega un barco de suministro cada 3 h en promedio, al azar. Cargar toma 5 h en promedio. Con 2 muelles, la cuenta con promedios dice: cada muelle trabaja 5 / (3 × 2) = <b>83 %</b> del tiempo. "Alcanza". Pero los barcos no llegan parejos:</p>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 175" role="img" aria-label="Ejemplo de juguete: cuatro barcos llegan en las horas 0, 1, 2 y 3. Los dos primeros toman los muelles. El tercero y el cuarto esperan 3 horas cada uno.">
+      <text class="t" x="100" y="46" text-anchor="end">muelle 1</text>
+      <text class="t" x="100" y="78" text-anchor="end">muelle 2</text>
+      <text class="t" x="100" y="116" text-anchor="end">esperando</text>
+      <g fill="currentColor"><polygon points="110,14 104,4 116,4"/><polygon points="150,14 144,4 156,4"/><polygon points="190,14 184,4 196,4"/><polygon points="230,14 224,4 236,4"/></g>
+      <text class="ts" x="245" y="12">llegan 4 barcos seguidos</text>
+      <rect class="b1" x="110" y="30" width="200" height="24" rx="3"/><text class="tb" x="210" y="46" text-anchor="middle">barco 1</text>
+      <rect class="b2" x="150" y="62" width="200" height="24" rx="3"/><text class="tb" x="250" y="78" text-anchor="middle">barco 2</text>
+      <rect class="b3" x="310" y="30" width="200" height="24" rx="3"/><text class="tb" x="410" y="46" text-anchor="middle">barco 3</text>
+      <rect class="b4" x="350" y="62" width="200" height="24" rx="3"/><text class="tb" x="450" y="78" text-anchor="middle">barco 4</text>
+      <rect x="190" y="100" width="120" height="10" class="lateb" opacity="0.75"/><text class="ta" x="316" y="109">barco 3 espera 3 h</text>
+      <rect x="230" y="114" width="120" height="10" class="lateb" opacity="0.75"/><text class="ta" x="356" y="123">barco 4 espera 3 h</text>
+      <line class="ax" x1="110" y1="140" x2="590" y2="140"/>
+      <g class="ts" text-anchor="middle"><text x="110" y="155">0</text><text x="190" y="155">2</text><text x="270" y="155">4</text><text x="350" y="155">6</text><text x="430" y="155">8</text><text x="510" y="155">10</text><text x="580" y="155">h</text></g>
+    </svg>
+    </div>
+    <figcaption>Ejemplo de juguete (no es del notebook): 4 barcos en 3 horas. Los muelles después quedan libres un buen rato, así que <i>en promedio</i> alcanzan. Pero la cola ya se formó. Eso es lo que la cuenta del 83 % no ve.</figcaption>
+  </figure>
+  <p><b>Simulación de eventos discretos:</b> el reloj salta de evento en evento (llega un barco, termina una carga). Cada barco toma el muelle que se libera primero. Un mes simulado es una <b>réplica</b>; el notebook hace 200.</p>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 160" role="img" aria-label="Espera media: 5,6 horas con 2 muelles, 0,65 con 3 y 0,14 con 4. La meta es 2 horas.">
+      <text class="t" x="130" y="40" text-anchor="end">2 muelles</text>
+      <text class="t" x="130" y="80" text-anchor="end">3 muelles</text>
+      <text class="t" x="130" y="120" text-anchor="end">4 muelles</text>
+      <line class="wall" x1="280" y1="16" x2="280" y2="138" stroke-dasharray="5 4" stroke-width="2"/>
+      <rect class="lateb" x="140" y="26" width="392" height="22"/><text class="tb" x="520" y="41" text-anchor="end" style="fill:#fff">5,6 h · todos los meses &gt; 2 h</text>
+      <rect class="okf" x="140" y="66" width="45.5" height="22"/><text class="t" x="192" y="81">0,65 h · ningún mes &gt; 2 h</text>
+      <rect class="okf" x="140" y="106" width="9.8" height="22"/><text class="t" x="156" y="121">0,14 h</text>
+      <text class="ta" x="286" y="152">meta: 2 h</text>
+      <line class="ax" x1="140" y1="138" x2="560" y2="138"/>
+      <g class="ts" text-anchor="middle"><text x="140" y="152">0</text><text x="420" y="152">4</text><text x="560" y="152">6 h</text></g>
+    </svg>
+    </div>
+    <figcaption>Promedios de 200 meses simulados. Con 2 muelles, el peor mes llegó a 20 h de espera media. Recomendación: <b>3 muelles</b>. El cuarto casi no aporta.</figcaption>
+  </figure>
+  <p><b>Simulación contra optimización:</b> la simulación <b>evalúa</b> un plan con toda la variabilidad ("¿qué pasa con 3 muelles?"). La optimización <b>elige</b> entre planes. Juntas forman un <i>digital twin</i> sencillo.</p>
+
+  <!-- ============ 5 ============ -->
+  <h2>4. El modelo crece: repuestos en 3 bases <span class="tag">notebook §5</span></h2>
+  <p>Volvemos a la red de la lección 5: bases en Władysławowo, Łeba y Ustka, y 4 parques. Ahora el módulo se guarda en las bases y, cuando falla uno, sale un barco desde una base con stock.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Etapa</th><th>Cuándo</th><th>Qué decido</th><th>Variable</th></tr></thead>
+    <tbody>
+      <tr><td>1ª</td><td>octubre, sin saber el invierno</td><td>qué bases habilito (20.000 €) y cuántos módulos guardo en cada una (40.000 € c/u, máx. 6)</td><td><code>z_b</code>, <code>y_b</code>: sin <code>s</code></td></tr>
+      <tr><td>2ª</td><td>en cada invierno, ya sabiendo las fallas</td><td>desde qué base atiendo cada falla; si no hay stock, urgencia (250.000 €)</td><td><code>x_bfs</code>, <code>e_fs</code>: con <code>s</code></td></tr>
+    </tbody>
+  </table></div>
+  <p>La segunda etapa de cada invierno es un <b>transporte de la lección 5</b>: las bases ofrecen su stock y los parques piden sus fallas. El modelo estocástico es N copias de ese transporte, unidas por el stock de octubre.</p>
+
+  <h3>Las tres restricciones, en español</h3>
+  <div class="rule">
+    <span><b>1. Stock solo en bases habilitadas:</b> <span class="f">y_b ≤ 6 · z_b</span>. Si no habilito la base (z = 0), su stock es 0.</span>
+    <span><b>2. No envío lo que no tengo:</b> <span class="f">Σ_f x_bfs ≤ y_b</span>, en cada invierno s. Lo que sale de una base no supera su stock.</span>
+    <span><b>3. Cada falla se atiende:</b> <span class="f">Σ_b x_bfs + e_fs = D_fs</span>, en cada invierno s. Con envío desde una base o con urgencia.</span>
+  </div>
+
+  <h3>Lo nuevo: las tormentas golpean a todos a la vez</h3>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 200" role="img" aria-label="Izquierda: escenarios correlados, cada invierno es del mismo tipo en los cuatro parques. Derecha: escenarios independientes, cada parque con su propio invierno.">
+      <text class="t" x="20" y="18" font-weight="600">Correlado (el notebook)</text>
+      <text class="t" x="320" y="18" font-weight="600">Independiente (ejercicio 3)</text>
+      <g class="ts" text-anchor="end"><text x="74" y="46">parque 1</text><text x="74" y="74">parque 2</text><text x="74" y="102">parque 3</text><text x="74" y="130">parque 4</text></g>
+      <g>
+        <rect class="b3" x="80" y="32" width="26" height="22"/><rect class="b2" x="108" y="32" width="26" height="22"/><rect class="b3" x="136" y="32" width="26" height="22"/><rect class="lateb" x="164" y="32" width="26" height="22"/><rect class="b3" x="192" y="32" width="26" height="22"/><rect class="b2" x="220" y="32" width="26" height="22"/><rect class="b3" x="248" y="32" width="26" height="22"/>
+        <rect class="b3" x="80" y="60" width="26" height="22"/><rect class="b2" x="108" y="60" width="26" height="22"/><rect class="b3" x="136" y="60" width="26" height="22"/><rect class="lateb" x="164" y="60" width="26" height="22"/><rect class="b3" x="192" y="60" width="26" height="22"/><rect class="b2" x="220" y="60" width="26" height="22"/><rect class="b3" x="248" y="60" width="26" height="22"/>
+        <rect class="b3" x="80" y="88" width="26" height="22"/><rect class="b2" x="108" y="88" width="26" height="22"/><rect class="b3" x="136" y="88" width="26" height="22"/><rect class="lateb" x="164" y="88" width="26" height="22"/><rect class="b3" x="192" y="88" width="26" height="22"/><rect class="b2" x="220" y="88" width="26" height="22"/><rect class="b3" x="248" y="88" width="26" height="22"/>
+        <rect class="b3" x="80" y="116" width="26" height="22"/><rect class="b2" x="108" y="116" width="26" height="22"/><rect class="b3" x="136" y="116" width="26" height="22"/><rect class="lateb" x="164" y="116" width="26" height="22"/><rect class="b3" x="192" y="116" width="26" height="22"/><rect class="b2" x="220" y="116" width="26" height="22"/><rect class="b3" x="248" y="116" width="26" height="22"/>
+      </g>
+      <text class="ts" x="80" y="160">cada columna es un invierno:</text>
+      <text class="ts" x="80" y="174">el duro es duro en los 4 parques</text>
+      <g>
+        <rect class="b3" x="380" y="32" width="26" height="22"/><rect class="b2" x="408" y="32" width="26" height="22"/><rect class="lateb" x="436" y="32" width="26" height="22"/><rect class="b3" x="464" y="32" width="26" height="22"/><rect class="b3" x="492" y="32" width="26" height="22"/><rect class="b2" x="520" y="32" width="26" height="22"/><rect class="b3" x="548" y="32" width="26" height="22"/>
+        <rect class="b2" x="380" y="60" width="26" height="22"/><rect class="b3" x="408" y="60" width="26" height="22"/><rect class="b3" x="436" y="60" width="26" height="22"/><rect class="b3" x="464" y="60" width="26" height="22"/><rect class="b2" x="492" y="60" width="26" height="22"/><rect class="b3" x="520" y="60" width="26" height="22"/><rect class="lateb" x="548" y="60" width="26" height="22"/>
+        <rect class="b3" x="380" y="88" width="26" height="22"/><rect class="b3" x="408" y="88" width="26" height="22"/><rect class="b2" x="436" y="88" width="26" height="22"/><rect class="lateb" x="464" y="88" width="26" height="22"/><rect class="b3" x="492" y="88" width="26" height="22"/><rect class="b3" x="520" y="88" width="26" height="22"/><rect class="b2" x="548" y="88" width="26" height="22"/>
+        <rect class="b3" x="380" y="116" width="26" height="22"/><rect class="b2" x="408" y="116" width="26" height="22"/><rect class="b3" x="436" y="116" width="26" height="22"/><rect class="b2" x="464" y="116" width="26" height="22"/><rect class="b3" x="492" y="116" width="26" height="22"/><rect class="b3" x="520" y="116" width="26" height="22"/><rect class="b3" x="548" y="116" width="26" height="22"/>
+      </g>
+      <text class="ts" x="380" y="160">cada parque con su invierno:</text>
+      <text class="ts" x="380" y="174">la calma de unos compensa a otros</text>
+      <rect class="b3" x="20" y="186" width="12" height="10"/><text class="ts" x="36" y="195">suave</text>
+      <rect class="b2" x="80" y="186" width="12" height="10"/><text class="ts" x="96" y="195">normal</text>
+      <rect class="lateb" x="146" y="186" width="12" height="10"/><text class="ts" x="162" y="195">duro</text>
+    </svg>
+    </div>
+    <figcaption>Con correlación, la demanda <b>total</b> varía mucho más: un invierno duro pide repuestos en los 4 parques a la vez. Si generas escenarios independientes, el modelo guarda un módulo menos y promete 366.000 €; en el mundo correlado, ese plan cuesta 450.000 €.</figcaption>
+  </figure>
+
+  <h3>El plan que sale (200 inviernos)</h3>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 270" role="img" aria-label="Plan: Łeba y Ustka con 3 módulos cada una, Władysławowo sin bodega. Łeba atiende sobre todo a los parques 1 y 2; Ustka a los parques 3 y 4. El grosor de cada flecha es el promedio de módulos enviados por invierno.">
+      <path class="edge" d="M210,135 L400,40" stroke-width="5.3"/>
+      <path class="edge" d="M210,135 L400,105" stroke-width="8.7"/>
+      <path class="edge" d="M210,135 L400,170" stroke-width="1.8"/>
+      <path class="edge" d="M210,210 L400,105" stroke-width="1.5"/>
+      <path class="edge" d="M210,210 L400,170" stroke-width="6.4"/>
+      <path class="edge" d="M210,210 L400,235" stroke-width="5.2"/>
+      <g class="t" text-anchor="middle"><text x="330" y="66">0,54</text><text x="330" y="106">0,96</text><text x="366" y="160">0,10</text><text x="244" y="176">0,06</text><text x="330" y="186">0,68</text><text x="330" y="240">0,53</text></g>
+      <rect class="chip" x="70" y="40" width="140" height="40" rx="6" stroke="var(--muted)" stroke-dasharray="4 3"/>
+      <text class="ts" x="140" y="57" text-anchor="middle">Władysławowo</text><text class="ts" x="140" y="72" text-anchor="middle">sin bodega</text>
+      <rect class="chip" x="70" y="115" width="140" height="40" rx="6" stroke="currentColor"/>
+      <text class="t" x="140" y="132" text-anchor="middle" font-weight="600">Łeba</text><text class="ts" x="140" y="147" text-anchor="middle">3 módulos</text>
+      <rect class="chip" x="70" y="190" width="140" height="40" rx="6" stroke="currentColor"/>
+      <text class="t" x="140" y="207" text-anchor="middle" font-weight="600">Ustka</text><text class="ts" x="140" y="222" text-anchor="middle">3 módulos</text>
+      <rect class="chip" x="400" y="22" width="180" height="36" rx="6" stroke="currentColor"/><text class="t" x="490" y="38" text-anchor="middle">parque 1</text><text class="ta" x="490" y="52" text-anchor="middle" font-size="11">urgencias 0,27</text>
+      <rect class="chip" x="400" y="87" width="180" height="36" rx="6" stroke="currentColor"/><text class="t" x="490" y="103" text-anchor="middle">parque 2</text><text class="ts" x="490" y="117" text-anchor="middle">urgencias 0,11</text>
+      <rect class="chip" x="400" y="152" width="180" height="36" rx="6" stroke="currentColor"/><text class="t" x="490" y="168" text-anchor="middle">parque 3</text><text class="ts" x="490" y="182" text-anchor="middle">urgencias 0,11</text>
+      <rect class="chip" x="400" y="217" width="180" height="36" rx="6" stroke="currentColor"/><text class="t" x="490" y="233" text-anchor="middle">parque 4</text><text class="ts" x="490" y="247" text-anchor="middle">urgencias 0,05</text>
+    </svg>
+    </div>
+    <figcaption>Primera etapa: 3 módulos en Łeba y 3 en Ustka. Segunda etapa, en promedio por invierno: el número en cada flecha es cuántos módulos salen por esa ruta. Las urgencias caen en el parque 1, el que está lejos de Łeba: cuando falta stock, el modelo lo usa donde el envío es barato. Casi todas las urgencias vienen de inviernos duros (71 % de ellos tiene alguna).</figcaption>
+  </figure>
+
+  <h3>Cuántos escenarios hacen falta</h3>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 240" role="img" aria-label="Lo que promete cada plan contra lo que cuesta en 5.000 inviernos nuevos. Desde 200 escenarios el plan es 3 y 3, y cuesta 446.000. El plan del promedio promete 239.000 y cuesta 480.000.">
+      <g class="t" text-anchor="end"><text x="140" y="36">N = 10</text><text x="140" y="80">N = 50</text><text x="140" y="124">N = 200</text><text x="140" y="168">N = 1.000</text><text x="140" y="212" font-weight="600">promedio</text></g>
+      <g class="ts" text-anchor="end"><text x="140" y="50">W5 · U2</text><text x="140" y="94">L3 · U2</text><text x="140" y="138">L3 · U3</text><text x="140" y="182">L3 · U3</text><text x="140" y="226">W1 · L1 · U2</text></g>
+      <rect class="bf" x="150" y="26" width="360" height="10"/><rect class="lateb" x="150" y="38" width="348.5" height="10"/>
+      <rect class="bf" x="150" y="70" width="327.8" height="10"/><rect class="lateb" x="150" y="82" width="337.2" height="10"/>
+      <rect class="bf" x="150" y="114" width="340.4" height="10"/><rect class="okf" x="150" y="126" width="334.7" height="10"/>
+      <rect class="bf" x="150" y="158" width="324.6" height="10"/><rect class="okf" x="150" y="170" width="334.7" height="10"/>
+      <rect class="bf" x="150" y="202" width="179.6" height="10"/><rect class="lateb" x="150" y="214" width="360" height="10"/>
+      <g class="ts"><text x="516" y="35">480</text><text x="504" y="47">465</text><text x="484" y="79">437</text><text x="493" y="91">450</text><text x="496" y="123">454</text><text x="491" y="135">446</text><text x="481" y="167">433</text><text x="491" y="179">446</text><text x="336" y="211">239</text><text x="516" y="223">480</text></g>
+      <rect class="bf" x="150" y="4" width="14" height="10"/><text class="ts" x="170" y="13">promete (mil €)</text>
+      <rect class="lateb" x="300" y="4" width="14" height="10"/><text class="ts" x="320" y="13">cuesta en 5.000 inviernos nuevos</text>
+    </svg>
+    </div>
+    <figcaption>W = Władysławowo, L = Łeba, U = Ustka, con el número de módulos. Desde 200 escenarios el plan ya no cambia y cuesta unos <b>446.000 €</b> por invierno. El plan con el promedio guarda solo 4 módulos, promete 239.000 € y cuesta 480.000 €: el doble. Su VSS: unos 34.000 € por invierno.</figcaption>
+  </figure>
+  <p><b>Los dos tamaños.</b> El modelo crece lineal con N: con 1.000 escenarios tiene 16.006 variables. Pero el espacio de búsqueda de la primera etapa es chico: cada base guarda de 0 a 6, son 7³ = 343 planes. Lo difícil no es elegir entre 343 planes; es <b>calcular el costo de cada uno</b>, que es un promedio sobre infinitos inviernos.</p>
+
+  <!-- ============ 6 ============ -->
+  <h2>5. ¿Qué herramienta uso? <span class="tag">notebook §6</span></h2>
+  <div class="rule"><span><b>Primero evalúa con Monte Carlo o simulación el plan que ya tienes. Si la incertidumbre sale cara y hay decisiones que se corrigen después, pasa a un modelo de 2 etapas.</b></span></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Situación</th><th>Herramienta</th><th>Aquí</th></tr></thead>
+    <tbody>
+      <tr><td>Tengo un plan; quiero su costo con toda la variabilidad</td><td>Monte Carlo</td><td>200.000 inviernos</td></tr>
+      <tr><td>Colas, esperas, recursos que se liberan en el tiempo</td><td>simulación de eventos discretos</td><td>muelles</td></tr>
+      <tr><td>Decido hoy y corrijo mañana, cuando sé qué pasó</td><td>2 etapas con SAA</td><td>repuestos y bases</td></tr>
+      <tr><td>Debe funcionar en todo un rango, sin probabilidades</td><td>optimización robusta</td><td>no está en la lección</td></tr>
+      <tr><td>"95 % de los inviernos sin urgencias"</td><td>restricción probabilística</td><td>no está en la lección</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Mapa para volver al notebook</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Celda del notebook</th><th>Qué mirar con los dibujos de aquí</th></tr></thead>
+    <tbody>
+      <tr><td><code>costo_esperado()</code> y la tabla de 0 a 8 (§2.1)</td><td>el dibujo de áreas y la curva con mínimo en 6</td></tr>
+      <tr><td><code>plan_promedio = 2</code> (§2.2)</td><td>el error del promedio: promete 80, cuesta 280</td></tr>
+      <tr><td><code>dos_etapas()</code></td><td>el árbol: <code>m.q</code> sin índice, <code>m.e[s]</code> con índice; <code>m.cubre</code> = barra azul + roja ≥ fallas</td></tr>
+      <tr><td><code>WS</code>, <code>RP</code>, <code>EEV</code> (§2.3)</td><td>la recta con EVPI y VSS</td></tr>
+      <tr><td><code>muestrear()</code> y <code>MUNDO</code> (§3)</td><td>la receta en dos sorteos y el histograma</td></tr>
+      <tr><td>La tabla <code>saa</code> (§3.1)</td><td>promete contra cuesta, por tamaño de muestra</td></tr>
+      <tr><td><code>intervalo()</code> (§3.2)</td><td>los intervalos que se achican con √N</td></tr>
+      <tr><td><code>un_mes()</code> (§4)</td><td>los muelles: "cada barco toma el muelle que se libera primero" es <code>libre.argmin()</code></td></tr>
+      <tr><td><code>escenarios_red()</code> (§5)</td><td>correlado contra independiente</td></tr>
+      <tr><td><code>red_dos_etapas()</code> (§5)</td><td><code>m.capacidad</code>, <code>m.stock</code> y <code>m.atiende</code> = las 3 restricciones en español</td></tr>
+      <tr><td>La tabla <code>escala</code> (§5.2)</td><td>cuántos escenarios hacen falta</td></tr>
+    </tbody>
+  </table></div>
+  <p>Si una celda sigue sin cerrar, pégame la celda y su salida y la dibujamos juntos.</p>
+</div>
+</body>
+</html>
