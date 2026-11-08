@@ -14,6 +14,8 @@ No necesitas instalar nada.
 
 Si una celda no se entiende, pega la celda y su salida en el chat y la vemos juntos.
 
+**Apoyo con dibujos:** `06_secuenciacion_dibujos.html` explica la lección 7 con un dibujo por cada restricción (retraso, disyuntiva con big-M, job shop, CP-SAT y barcos). Descárgalo y ábrelo en el navegador; al final trae un mapa a las celdas del notebook.
+
 ## Notación matemática
 Cada problema trae su formulación como se escribe en un libro o en una entrevista, justo al lado de su versión en palabras y en Pyomo.
 - La primera vez que aparece un símbolo, una tabla dice cómo se lee, qué significa y su equivalente en Python o SQL.

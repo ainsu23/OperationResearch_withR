@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Secuenciación en dibujos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: una columna de lectura, como un cuaderno de taller; cada restricción es un dibujo con su regla debajo. */
+:root {
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --fg: #18202b;
+  --muted: #5d6878;
+  --line: #c8d0da;
+  --accent: #d4462f;      /* retraso, prohibido */
+  --ok: #2b8a57;          /* permitido */
+  --day-bad: #d7dce3;     /* mal tiempo */
+  --j1: #6f9fe6; --j2: #efc15a; --j3: #5cc2b3; --j4: #b48ae0; --j5: #a8c46a;
+  --faint: #e3e8ee;
+  --on-bar: #121820;
+  --display: "Archivo", "Arial Narrow", Arial, sans-serif;
+  --body: "Source Sans 3", "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12161c; --surface: #1a2029; --fg: #e7ebf1; --muted: #9ba6b5; --line: #343d4a;
+    --accent: #ff6d55; --ok: #4fc58c; --day-bad: #2c333d; --faint: #232a34;
+    --j1: #7aa8ee; --j2: #f2c768; --j3: #66cbbd; --j4: #bf98ea; --j5: #b3cf74;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12161c; --surface: #1a2029; --fg: #e7ebf1; --muted: #9ba6b5; --line: #343d4a;
+  --accent: #ff6d55; --ok: #4fc58c; --day-bad: #2c333d; --faint: #232a34;
+  --j1: #7aa8ee; --j2: #f2c768; --j3: #66cbbd; --j4: #bf98ea; --j5: #b3cf74;
+  color-scheme: dark;
+}
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 17px; line-height: 1.55; }
+.wrap { max-width: 760px; margin: 0 auto; padding-block: 32px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 18px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; line-height: 1.15; margin: 0; }
+h1 { font-size: clamp(30px, 6vw, 44px); font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: 26px; font-weight: 800; margin-top: 28px; padding-top: 18px; border-top: 2px solid var(--fg); }
+h3 { font-size: 19px; font-weight: 600; margin-top: 8px; }
+p, ul, ol { margin: 0; max-width: 65ch; }
+ul, ol { padding-left: 22px; display: flex; flex-direction: column; gap: 4px; }
+.lead { font-size: 19px; color: var(--muted); }
+.tag { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+code, .f { font-family: var(--mono); font-size: 0.88em; }
+.f { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; white-space: nowrap; }
+.rule { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--fg); border-radius: 4px; padding: 12px 16px; display: flex; flex-direction: column; gap: 6px; max-width: 65ch; }
+.rule .f { background: var(--bg); }
+.rule b { font-family: var(--display); font-weight: 600; }
+.ana { color: var(--muted); font-style: italic; }
+figure { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.fig { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+figure svg { display: block; width: 100%; min-width: 520px; height: auto; color: var(--fg); font-family: var(--mono); }
+figcaption { font-size: 15px; color: var(--muted); max-width: 65ch; }
+table { border-collapse: collapse; font-size: 15px; width: 100%; }
+.tbl { overflow-x: auto; }
+th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--display); font-weight: 600; font-size: 14px; }
+td.n { font-variant-numeric: tabular-nums; }
+.late { color: var(--accent); font-weight: 600; }
+.okc { color: var(--ok); font-weight: 600; }
+/* clases del dibujo */
+.ax { stroke: currentColor; stroke-width: 1; fill: none; }
+.tick { stroke: currentColor; stroke-width: 1; }
+.t { fill: currentColor; font-size: 12px; }
+.ts { fill: var(--muted); font-size: 11px; }
+.tb { fill: var(--on-bar); font-size: 11px; font-weight: 600; }
+.ta { fill: var(--accent); font-size: 12px; font-weight: 600; }
+.tok { fill: var(--ok); font-size: 12px; font-weight: 600; }
+.b1 { fill: var(--j1); } .b2 { fill: var(--j2); } .b3 { fill: var(--j3); } .b4 { fill: var(--j4); } .b5 { fill: var(--j5); }
+.bf { fill: var(--faint); stroke: var(--line); }
+.due { stroke: currentColor; stroke-width: 1.4; stroke-dasharray: 3 3; }
+.lateb { fill: var(--accent); }
+.wall { stroke: var(--accent); stroke-width: 3; }
+.off { stroke: var(--muted); stroke-width: 2; stroke-dasharray: 5 4; }
+.bad { fill: var(--day-bad); }
+.okf { fill: var(--ok); }
+.okl { stroke: var(--ok); stroke-width: 2; fill: none; }
+.al { stroke: var(--accent); stroke-width: 2; fill: none; }
+.chip { fill: var(--surface); stroke-width: 2; }
+.s1 { stroke: var(--j1); } .s2 { stroke: var(--j2); } .s3 { stroke: var(--j3); } .s4 { stroke: var(--j4); } .s5 { stroke: var(--j5); }
+.node { fill: var(--surface); stroke: currentColor; stroke-width: 1.4; }
+.edge { stroke: var(--muted); stroke-width: 1.4; }
+.band { fill: var(--accent); opacity: 0.12; }
+.hl { fill: none; stroke: var(--accent); stroke-width: 2.5; }
+@media (max-width: 480px) { body { font-size: 16px; } h2 { font-size: 22px; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:10px">
+    <span class="tag">Lección 7 · notebook 06_secuenciacion.ipynb</span>
+    <h1>Secuenciación en dibujos</h1>
+    <p class="lead">El notebook tiene tres problemas. Aquí van los mismos, con los mismos números, pero cada fórmula tiene un dibujo y una frase en español.</p>
+    <p>Cómo usarlo: lee una sección aquí y después corre la misma sección en el notebook. Cada título dice a qué sección corresponde.</p>
+  </header>
+
+  <h2>La idea en una frase</h2>
+  <p><b>Secuenciar es decidir el orden.</b> No decides cuánto producir ni quién trabaja: decides <b>quién va primero</b> en un recurso que solo hace una cosa a la vez.</p>
+  <p class="ana">La mañana en casa con un solo baño: tú, tu esposa y tu hijo. El baño es la máquina. Si el orden sale mal, tu hijo llega tarde al przedszkole. Eso es un retraso.</p>
+
+  <!-- ============ 2 ============ -->
+  <h2>1. Una máquina, cuatro trabajos <span class="tag">notebook §2</span></h2>
+  <p>El taller tiene <b>un</b> banco de prueba de presión. Hoy le llegan 4 trabajos:</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Trabajo</th><th>Horas en el banco</th><th>El cliente lo quiere a la hora</th></tr></thead>
+    <tbody>
+      <tr><td>A · valvula_A</td><td class="n">4</td><td class="n">6</td></tr>
+      <tr><td>B · valvula_B</td><td class="n">2</td><td class="n">3</td></tr>
+      <tr><td>C · conector_C</td><td class="n">3</td><td class="n">10</td></tr>
+      <tr><td>D · brida_D</td><td class="n">5</td><td class="n">8</td></tr>
+    </tbody>
+  </table></div>
+  <p>Si un trabajo termina después de la hora del cliente, la diferencia es el <b>retraso</b>. Si termina antes, el retraso es 0: llegar temprano no da premio.</p>
+
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 330" role="img" aria-label="Dos órdenes del banco. En el orden de la tabla, B y D llegan tarde y suman 9 horas de retraso. En el mejor orden, B primero, solo D llega tarde: 6 horas.">
+      <text class="t" x="110" y="16" font-weight="600">Orden de la tabla: A → B → C → D</text>
+      <text class="ta" x="590" y="16" text-anchor="end">retraso total 9 h</text>
+      <text class="t" x="100" y="42" text-anchor="end">A</text>
+      <text class="t" x="100" y="68" text-anchor="end">B</text>
+      <text class="t" x="100" y="94" text-anchor="end">C</text>
+      <text class="t" x="100" y="120" text-anchor="end">D</text>
+      <rect class="b1" x="110" y="28" width="128" height="20" rx="3"/><text class="tb" x="174" y="42" text-anchor="middle">A · 4 h</text>
+      <rect class="b2" x="238" y="54" width="64" height="20" rx="3"/><text class="tb" x="270" y="68" text-anchor="middle">B</text>
+      <rect class="b3" x="302" y="80" width="96" height="20" rx="3"/><text class="tb" x="350" y="94" text-anchor="middle">C · 3 h</text>
+      <rect class="b4" x="398" y="106" width="160" height="20" rx="3"/><text class="tb" x="478" y="120" text-anchor="middle">D · 5 h</text>
+      <line class="due" x1="302" y1="24" x2="302" y2="52"/>
+      <line class="due" x1="206" y1="50" x2="206" y2="78"/>
+      <line class="due" x1="430" y1="76" x2="430" y2="104"/>
+      <line class="due" x1="366" y1="102" x2="366" y2="130"/>
+      <rect class="lateb" x="206" y="75" width="96" height="4"/><text class="ta" x="308" y="68">+3 h</text>
+      <rect class="lateb" x="366" y="127" width="192" height="4"/><text class="ta" x="564" y="120">+6 h</text>
+      <line class="ax" x1="110" y1="140" x2="558" y2="140"/>
+      <g class="ts" text-anchor="middle">
+        <text x="110" y="154">0</text><text x="174" y="154">2</text><text x="238" y="154">4</text><text x="302" y="154">6</text><text x="366" y="154">8</text><text x="430" y="154">10</text><text x="494" y="154">12</text><text x="558" y="154">14 h</text>
+      </g>
+
+      <text class="t" x="110" y="181" font-weight="600">El mejor orden: B → A → C → D</text>
+      <text class="ta" x="590" y="181" text-anchor="end">retraso total 6 h</text>
+      <text class="t" x="100" y="207" text-anchor="end">A</text>
+      <text class="t" x="100" y="233" text-anchor="end">B</text>
+      <text class="t" x="100" y="259" text-anchor="end">C</text>
+      <text class="t" x="100" y="285" text-anchor="end">D</text>
+      <rect class="b1" x="174" y="193" width="128" height="20" rx="3"/><text class="tb" x="238" y="207" text-anchor="middle">A · 4 h</text>
+      <rect class="b2" x="110" y="219" width="64" height="20" rx="3"/><text class="tb" x="142" y="233" text-anchor="middle">B</text>
+      <rect class="b3" x="302" y="245" width="96" height="20" rx="3"/><text class="tb" x="350" y="259" text-anchor="middle">C · 3 h</text>
+      <rect class="b4" x="398" y="271" width="160" height="20" rx="3"/><text class="tb" x="478" y="285" text-anchor="middle">D · 5 h</text>
+      <line class="due" x1="302" y1="189" x2="302" y2="217"/>
+      <line class="due" x1="206" y1="215" x2="206" y2="243"/>
+      <line class="due" x1="430" y1="241" x2="430" y2="269"/>
+      <line class="due" x1="366" y1="267" x2="366" y2="295"/>
+      <text class="tok" x="308" y="207">justo a tiempo</text>
+      <rect class="lateb" x="366" y="292" width="192" height="4"/><text class="ta" x="564" y="285">+6 h</text>
+      <line class="ax" x1="110" y1="305" x2="558" y2="305"/>
+      <g class="ts" text-anchor="middle">
+        <text x="110" y="319">0</text><text x="174" y="319">2</text><text x="238" y="319">4</text><text x="302" y="319">6</text><text x="366" y="319">8</text><text x="430" y="319">10</text><text x="494" y="319">12</text><text x="558" y="319">14 h</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>Cada trabajo tiene su fila. La línea punteada es la hora que pidió el cliente; la franja roja es el retraso. Mover B, el corto y urgente, al principio quita 3 horas de retraso. La D siempre llega tarde: el banco no puede terminar las 14 horas antes de la hora 8.</figcaption>
+  </figure>
+  <p>Con 4 trabajos hay 24 órdenes y la computadora los prueba todos. Con 20 trabajos hay 2,4 trillones: por eso se escribe un modelo.</p>
+
+  <h3>Los nombres de las piezas</h3>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 140" role="img" aria-label="La brida D en el mejor orden: empieza en 9, dura 5, termina en 14. El cliente la quería a las 8, así que llega 6 horas tarde.">
+      <rect class="b4" x="398" y="48" width="160" height="28" rx="3"/>
+      <text class="tb" x="478" y="66" text-anchor="middle">p = 5 h (dura)</text>
+      <line class="due" x1="366" y1="38" x2="366" y2="96"/>
+      <text class="t" x="360" y="32" text-anchor="end">d = 8 (entrega)</text>
+      <line class="tick" x1="398" y1="38" x2="398" y2="48"/>
+      <text class="t" x="400" y="32">S = 9 (empieza)</text>
+      <line class="tick" x1="558" y1="38" x2="558" y2="48"/>
+      <text class="t" x="590" y="32" text-anchor="end">C = 14</text>
+      <line class="al" x1="366" y1="88" x2="558" y2="88"/>
+      <line class="al" x1="366" y1="82" x2="366" y2="94"/><line class="al" x1="558" y1="82" x2="558" y2="94"/>
+      <text class="ta" x="462" y="104" text-anchor="middle">T = 14 − 8 = 6 h de retraso</text>
+      <line class="ax" x1="110" y1="118" x2="558" y2="118"/>
+      <g class="ts" text-anchor="middle">
+        <text x="110" y="132">0</text><text x="174" y="132">2</text><text x="238" y="132">4</text><text x="302" y="132">6</text><text x="366" y="132">8</text><text x="430" y="132">10</text><text x="494" y="132">12</text><text x="558" y="132">14 h</text>
+      </g>
+      <text class="t" x="20" y="66">brida_D</text>
+    </svg>
+    </div>
+    <figcaption>Cinco letras para un solo trabajo. Dos son datos (p y d), dos son variables que el modelo decide (S y T) y una se calcula (C = S + p).</figcaption>
+  </figure>
+  <div class="tbl"><table>
+    <thead><tr><th>Letra</th><th>En inglés</th><th>Qué es</th><th>¿Quién la pone?</th></tr></thead>
+    <tbody>
+      <tr><td><code>p</code></td><td>processing time</td><td>cuántas horas dura</td><td>dato</td></tr>
+      <tr><td><code>d</code></td><td>due date</td><td>hora que pidió el cliente</td><td>dato</td></tr>
+      <tr><td><code>S</code></td><td>start</td><td>hora en que empieza</td><td>el modelo (variable)</td></tr>
+      <tr><td><code>C = S + p</code></td><td>completion</td><td>hora en que termina</td><td>sale sola</td></tr>
+      <tr><td><code>T</code></td><td>tardiness</td><td>retraso</td><td>el modelo (variable)</td></tr>
+    </tbody>
+  </table></div>
+  <p>El objetivo es simple: <span class="f">min T_A + T_B + T_C + T_D</span>. El trabajo está en las <b>dos restricciones</b>.</p>
+
+  <h3>Restricción 1: el retraso, con dos pisos</h3>
+  <div class="rule">
+    <span><b>En notación:</b> <span class="f">T_j ≥ S_j + p_j − d_j</span> y <span class="f">T_j ≥ 0</span></span>
+    <span><b>En español:</b> el retraso no puede bajar de "lo que pasé la entrega" ni de cero.</span>
+  </div>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 200" role="img" aria-label="El retraso T es una pelota que el solver empuja hacia abajo. Se queda en el piso más alto. Para la brida D, el piso más alto es 6. Para el conector C, es 0.">
+      <text class="t" x="30" y="18" font-weight="600">brida_D: C − d = 14 − 8 = 6</text>
+      <line class="ax" x1="40" y1="66" x2="270" y2="66" stroke-width="2"/>
+      <text class="ts" x="40" y="60">piso 1: C − d = 6</text>
+      <line class="ax" x1="40" y1="150" x2="270" y2="150" stroke-width="2"/>
+      <text class="ts" x="40" y="144">piso 2: 0</text>
+      <circle cx="200" cy="54" r="11" class="lateb"/>
+      <text class="ta" x="218" y="44">T = 6</text>
+      <line class="ax" x1="200" y1="24" x2="200" y2="38"/><polygon points="196,36 204,36 200,42" fill="currentColor"/>
+      <text class="ts" x="30" y="186">el piso alto es C − d: llegó tarde</text>
+
+      <text class="t" x="320" y="18" font-weight="600">conector_C: C − d = 9 − 10 = −1</text>
+      <line class="ax" x1="330" y1="150" x2="560" y2="150" stroke-width="2"/>
+      <text class="ts" x="330" y="144">piso 2: 0</text>
+      <line class="ax" x1="330" y1="164" x2="560" y2="164" stroke-width="2"/>
+      <text class="ts" x="330" y="180">piso 1: C − d = −1</text>
+      <circle cx="490" cy="138" r="11" class="okf"/>
+      <text class="tok" x="508" y="128">T = 0</text>
+      <line class="ax" x1="490" y1="96" x2="490" y2="120"/><polygon points="486,118 494,118 490,124" fill="currentColor"/>
+      <text class="ts" x="320" y="196">el piso alto es 0: llegó a tiempo</text>
+    </svg>
+    </div>
+    <figcaption>Como el objetivo minimiza, el solver empuja T hacia abajo (la flecha). T se queda en el piso más alto. Así, dos restricciones lineales calculan <code>max(0, C − d)</code> sin escribir "max".</figcaption>
+  </figure>
+
+  <h3>Restricción 2: dos trabajos no se pisan</h3>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 160" role="img" aria-label="Para A y B solo hay dos opciones permitidas: A antes que B, o B antes que A. Si se pisan, el banco haría dos cosas a la vez: prohibido.">
+      <text class="t" x="100" y="36" text-anchor="end">opción 1</text>
+      <rect class="b1" x="110" y="20" width="128" height="24" rx="3"/><text class="tb" x="174" y="36" text-anchor="middle">A</text>
+      <rect class="b2" x="238" y="20" width="64" height="24" rx="3"/><text class="tb" x="270" y="36" text-anchor="middle">B</text>
+      <text class="tok" x="340" y="36">✓ A antes que B</text>
+
+      <text class="t" x="100" y="76" text-anchor="end">opción 2</text>
+      <rect class="b2" x="110" y="60" width="64" height="24" rx="3"/><text class="tb" x="142" y="76" text-anchor="middle">B</text>
+      <rect class="b1" x="174" y="60" width="128" height="24" rx="3"/><text class="tb" x="238" y="76" text-anchor="middle">A</text>
+      <text class="tok" x="340" y="76">✓ B antes que A</text>
+
+      <text class="t" x="100" y="116" text-anchor="end">prohibido</text>
+      <rect class="b1" x="110" y="100" width="128" height="24" rx="3"/>
+      <rect class="b2" x="174" y="106" width="64" height="24" rx="3" opacity="0.85"/>
+      <rect x="174" y="100" width="64" height="30" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+      <text class="tb" x="140" y="116" text-anchor="middle">A</text>
+      <text class="ta" x="340" y="116">✗ se pisan de 2 a 4</text>
+
+      <line class="ax" x1="110" y1="142" x2="302" y2="142"/>
+      <g class="ts" text-anchor="middle"><text x="110" y="155">0</text><text x="174" y="155">2</text><text x="238" y="155">4</text><text x="302" y="155">6 h</text></g>
+    </svg>
+    </div>
+    <figcaption>Para cada par de trabajos hay exactamente dos formas buenas. El problema: "esto <b>o</b> esto" no es lineal. Una restricción lineal solo sabe decir "esto <b>y</b> esto".</figcaption>
+  </figure>
+
+  <h3>El truco: un interruptor y una pared</h3>
+  <p>Para cada par se agrega una variable <code>y</code> que vale 0 o 1. Es un <b>interruptor</b>: dice cuál de los dos va primero. Y se escriben <b>dos paredes</b>. Una pared dice "este trabajo no puede empezar antes de aquí".</p>
+  <div class="rule">
+    <span><b>Pared 1:</b> <span class="f">S_B ≥ S_A + p_A − M·(1 − y)</span></span>
+    <span><b>Pared 2:</b> <span class="f">S_A ≥ S_B + p_B − M·y</span></span>
+    <span>M = 14, las horas de todo el trabajo junto. M es "un número tan grande que empuja la pared fuera del dibujo".</span>
+  </div>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 262" role="img" aria-label="Con y igual a 1, la pared de B queda en la hora 4 y la de A se va a menos 8, donde no estorba. Con y igual a 0 pasa al revés: la pared de A queda en 2 y la de B se va a menos 8.">
+      <text class="t" x="20" y="18" font-weight="600">y = 1 → A va primero</text>
+      <rect class="b1" x="300" y="38" width="96" height="20" rx="3"/><text class="tb" x="348" y="52" text-anchor="middle">A</text>
+      <rect class="b2" x="396" y="66" width="48" height="20" rx="3"/><text class="tb" x="420" y="80" text-anchor="middle">B</text>
+      <line class="wall" x1="396" y1="60" x2="396" y2="92"/>
+      <text class="ta" x="452" y="74">pared 1, activa:</text><text class="ta" x="452" y="88">S_B ≥ 4</text>
+      <line class="off" x1="108" y1="32" x2="108" y2="62"/>
+      <text class="ts" x="116" y="44">pared 2: S_A ≥ 6 − 14 = −8</text>
+      <text class="ts" x="116" y="58">(apagada: está lejos)</text>
+      <line class="ax" x1="60" y1="104" x2="540" y2="104"/>
+      <g class="ts" text-anchor="middle"><text x="108" y="118">−8</text><text x="204" y="118">−4</text><text x="300" y="118">0</text><text x="396" y="118">4</text><text x="492" y="118">8 h</text></g>
+
+      <text class="t" x="20" y="146" font-weight="600">y = 0 → B va primero</text>
+      <rect class="b1" x="348" y="164" width="96" height="20" rx="3"/><text class="tb" x="396" y="178" text-anchor="middle">A</text>
+      <rect class="b2" x="300" y="192" width="48" height="20" rx="3"/><text class="tb" x="324" y="206" text-anchor="middle">B</text>
+      <line class="wall" x1="348" y1="158" x2="348" y2="190"/>
+      <text class="ta" x="452" y="172">pared 2, activa:</text><text class="ta" x="452" y="186">S_A ≥ 2</text>
+      <line class="off" x1="108" y1="188" x2="108" y2="218"/>
+      <text class="ts" x="116" y="200">pared 1: S_B ≥ 6 − 14 = −8</text>
+      <text class="ts" x="116" y="214">(apagada: está lejos)</text>
+      <line class="ax" x1="60" y1="232" x2="540" y2="232"/>
+      <g class="ts" text-anchor="middle"><text x="108" y="246">−8</text><text x="204" y="246">−4</text><text x="300" y="246">0</text><text x="396" y="246">4</text><text x="492" y="246">8 h</text></g>
+    </svg>
+    </div>
+    <figcaption>La pared roja es la que manda. La gris punteada también existe, pero el "− 14" la tiró a la hora −8: ningún trabajo empieza antes de 0, así que no molesta. El interruptor decide cuál pared se prende.</figcaption>
+  </figure>
+  <p class="ana">Analogía: el baño con cerrojo. Si <code>y = 1</code>, tú tienes la llave y tu esposa espera afuera. Si <code>y = 0</code>, al revés. Nunca entran los dos.</p>
+  <p>Con 4 trabajos hay 6 pares: 6 interruptores y 12 paredes. El modelo da 6 horas, igual que probar los 24 órdenes.</p>
+
+  <h3>Por qué este truco es débil</h3>
+  <p>Para buscar rápido, el solver primero resuelve una versión "relajada": deja que el interruptor valga cualquier número entre 0 y 1, por ejemplo <b>½</b>. Con <code>y = ½</code>, <b>las dos paredes</b> se mueven 7 horas a la izquierda (M/2 = 7). Ningún trabajo dura más de 5 horas, así que las dos quedan fuera del camino.</p>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 170" role="img" aria-label="Lo que cree el LP relajado: los cuatro trabajos se pisan entre la hora 0 y la 6, todos terminan antes de su entrega, retraso 0. El óptimo real es 6 horas.">
+      <rect class="band" x="110" y="14" width="192" height="108"/>
+      <text class="t" x="100" y="34" text-anchor="end">A</text>
+      <text class="t" x="100" y="60" text-anchor="end">B</text>
+      <text class="t" x="100" y="86" text-anchor="end">C</text>
+      <text class="t" x="100" y="112" text-anchor="end">D</text>
+      <rect class="b1" x="174" y="20" width="128" height="20" rx="3"/>
+      <rect class="b2" x="142" y="46" width="64" height="20" rx="3"/>
+      <rect class="b3" x="110" y="72" width="96" height="20" rx="3"/>
+      <rect class="b4" x="110" y="98" width="160" height="20" rx="3"/>
+      <line class="due" x1="302" y1="16" x2="302" y2="44"/>
+      <line class="due" x1="206" y1="42" x2="206" y2="70"/>
+      <line class="due" x1="430" y1="68" x2="430" y2="96"/>
+      <line class="due" x1="366" y1="94" x2="366" y2="122"/>
+      <text class="ta" x="450" y="40">el LP cree: retraso 0 h</text>
+      <text class="t" x="450" y="58">la realidad: 6 h</text>
+      <text class="ts" x="450" y="84">en la franja roja,</text>
+      <text class="ts" x="450" y="98">el banco hace 4 cosas</text>
+      <text class="ts" x="450" y="112">a la vez</text>
+      <line class="ax" x1="110" y1="134" x2="430" y2="134"/>
+      <g class="ts" text-anchor="middle"><text x="110" y="148">0</text><text x="174" y="148">2</text><text x="238" y="148">4</text><text x="302" y="148">6</text><text x="366" y="148">8</text><text x="430" y="148">10 h</text></g>
+    </svg>
+    </div>
+    <figcaption>Son los inicios reales que da el LP del notebook (A en 2, B en 1, C y D en 0). Todos terminan antes de su entrega. El LP dice "se puede con 0 retraso" y el solver no puede descartar casi nada con esa cota.</figcaption>
+  </figure>
+  <p class="ana">Analogía: en el LP el baño tiene cortina en vez de puerta. Medio tú y media tu esposa adentro al mismo tiempo. Nadie espera, nadie llega tarde. Es mentira, pero es la cota que ve el solver.</p>
+  <div class="rule"><span><b>Para la entrevista:</b> "With y = 0.5 both disjunctive constraints are relaxed by M/2, so the LP lets all jobs overlap. The LP bound was 0 against an optimum of 6, whatever M I used."</span></div>
+
+  <!-- ============ 4 ============ -->
+  <h2>2. El taller con tres máquinas <span class="tag">notebook §4</span></h2>
+  <p>Ahora hay torno, fresado y prueba. Cada trabajo pasa por algunas máquinas <b>en un orden fijo</b>: su <b>ruta</b>. Como una receta: cortar, cocinar, emplatar.</p>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 190" role="img" aria-label="Las rutas de los cinco trabajos: cada uno visita sus máquinas en orden.">
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+      <text class="t" x="10" y="31">valvula_1</text>
+      <rect class="chip s1" x="120" y="14" width="120" height="26" rx="5"/><text class="t" x="180" y="31" text-anchor="middle">torno · 3 h</text>
+      <line class="ax" x1="244" y1="27" x2="272" y2="27" marker-end="url(#ah)"/>
+      <rect class="chip s1" x="276" y="14" width="120" height="26" rx="5"/><text class="t" x="336" y="31" text-anchor="middle">fresado · 2 h</text>
+      <line class="ax" x1="400" y1="27" x2="428" y2="27" marker-end="url(#ah)"/>
+      <rect class="chip s1" x="432" y="14" width="120" height="26" rx="5"/><text class="t" x="492" y="31" text-anchor="middle">prueba · 2 h</text>
+
+      <text class="t" x="10" y="65">valvula_2</text>
+      <rect class="chip s2" x="120" y="48" width="120" height="26" rx="5"/><text class="t" x="180" y="65" text-anchor="middle">torno · 2 h</text>
+      <line class="ax" x1="244" y1="61" x2="272" y2="61" marker-end="url(#ah)"/>
+      <rect class="chip s2" x="276" y="48" width="120" height="26" rx="5"/><text class="t" x="336" y="65" text-anchor="middle">prueba · 1 h</text>
+      <line class="ax" x1="400" y1="61" x2="428" y2="61" marker-end="url(#ah)"/>
+      <rect class="chip s2" x="432" y="48" width="120" height="26" rx="5"/><text class="t" x="492" y="65" text-anchor="middle">fresado · 4 h</text>
+
+      <text class="t" x="10" y="99">conector_1</text>
+      <rect class="chip s3" x="120" y="82" width="120" height="26" rx="5"/><text class="t" x="180" y="99" text-anchor="middle">fresado · 4 h</text>
+      <line class="ax" x1="244" y1="95" x2="272" y2="95" marker-end="url(#ah)"/>
+      <rect class="chip s3" x="276" y="82" width="120" height="26" rx="5"/><text class="t" x="336" y="99" text-anchor="middle">prueba · 3 h</text>
+
+      <text class="t" x="10" y="133">conector_2</text>
+      <rect class="chip s4" x="120" y="116" width="120" height="26" rx="5"/><text class="t" x="180" y="133" text-anchor="middle">prueba · 2 h</text>
+      <line class="ax" x1="244" y1="129" x2="272" y2="129" marker-end="url(#ah)"/>
+      <rect class="chip s4" x="276" y="116" width="120" height="26" rx="5"/><text class="t" x="336" y="133" text-anchor="middle">torno · 3 h</text>
+      <line class="ax" x1="400" y1="129" x2="428" y2="129" marker-end="url(#ah)"/>
+      <rect class="chip s4" x="432" y="116" width="120" height="26" rx="5"/><text class="t" x="492" y="133" text-anchor="middle">fresado · 1 h</text>
+
+      <text class="t" x="10" y="167">forjado_1</text>
+      <rect class="chip s5" x="120" y="150" width="120" height="26" rx="5"/><text class="t" x="180" y="167" text-anchor="middle">torno · 5 h</text>
+      <line class="ax" x1="244" y1="163" x2="272" y2="163" marker-end="url(#ah)"/>
+      <rect class="chip s5" x="276" y="150" width="120" height="26" rx="5"/><text class="t" x="336" y="167" text-anchor="middle">fresado · 2 h</text>
+    </svg>
+    </div>
+    <figcaption>13 operaciones en total. Cada cajita es una fila de la tabla <code>OPS</code> del notebook: (trabajo, paso, máquina, horas). El paso 0 es la primera cajita.</figcaption>
+  </figure>
+  <p><b>El objetivo cambia:</b> ya no es el retraso, es el <b>makespan</b> (<code>C_max</code>): la hora en que termina el último trabajo. "¿A qué hora cierro el taller?"</p>
+
+  <h3>Restricción 1: la ruta</h3>
+  <div class="rule">
+    <span><b>En notación:</b> <span class="f">S[j, k] ≥ S[j, k−1] + p[j, k−1]</span></span>
+    <span><b>En español:</b> el paso k de un trabajo empieza cuando terminó su paso anterior. Puede empezar después (esperar), nunca antes.</span>
+  </div>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 150" role="img" aria-label="La válvula 1 termina en el torno a las 5 pero espera hasta las 8 para el fresado, porque el fresado está ocupado. Después pasa a prueba a las 10.">
+      <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+      <text class="t" x="100" y="36" text-anchor="end">torno</text>
+      <text class="t" x="100" y="72" text-anchor="end">fresado</text>
+      <text class="t" x="100" y="108" text-anchor="end">prueba</text>
+      <rect class="bf" x="110" y="20" width="64" height="24" rx="3"/>
+      <rect class="b1" x="174" y="20" width="96" height="24" rx="3"/><text class="tb" x="222" y="36" text-anchor="middle">v1 paso 0</text>
+      <rect class="bf" x="270" y="20" width="160" height="24" rx="3"/>
+      <rect class="bf" x="430" y="20" width="96" height="24" rx="3"/>
+      <rect class="bf" x="110" y="56" width="128" height="24" rx="3"/>
+      <rect class="bf" x="238" y="56" width="128" height="24" rx="3"/><text class="ts" x="302" y="72" text-anchor="middle">ocupado (v2)</text>
+      <rect class="b1" x="366" y="56" width="64" height="24" rx="3"/><text class="tb" x="398" y="72" text-anchor="middle">paso 1</text>
+      <rect class="bf" x="430" y="56" width="64" height="24" rx="3"/>
+      <rect class="bf" x="526" y="56" width="32" height="24" rx="3"/>
+      <rect class="bf" x="110" y="92" width="64" height="24" rx="3"/>
+      <rect class="bf" x="174" y="92" width="32" height="24" rx="3"/>
+      <rect class="bf" x="238" y="92" width="96" height="24" rx="3"/>
+      <rect class="b1" x="430" y="92" width="64" height="24" rx="3"/><text class="tb" x="462" y="108" text-anchor="middle">paso 2</text>
+      <path class="ax" d="M270,44 L270,50 L362,50 L362,54" marker-end="url(#ah2)" stroke-width="1.6"/>
+      <text class="ta" x="280" y="13" font-size="11">v1 espera 3 h ↓</text>
+      <line class="ax" x1="430" y1="80" x2="430" y2="90" marker-end="url(#ah2)" stroke-width="1.6"/>
+      <line class="ax" x1="110" y1="128" x2="558" y2="128"/>
+      <g class="ts" text-anchor="middle"><text x="110" y="142">0</text><text x="174" y="142">2</text><text x="238" y="142">4</text><text x="302" y="142">6</text><text x="366" y="142">8</text><text x="430" y="142">10</text><text x="494" y="142">12</text><text x="558" y="142">14 h</text></g>
+    </svg>
+    </div>
+    <figcaption>Solo pinté la válvula 1 (v1); lo gris son los otros trabajos. La flecha es la restricción de ruta: el paso 1 no puede empezar antes de que termine el paso 0. Aquí espera 3 horas porque el fresado está ocupado.</figcaption>
+  </figure>
+
+  <h3>Restricción 2: la máquina no se pisa (solo entre vecinos de máquina)</h3>
+  <p>Es la misma pared con interruptor del banco. Pero solo hace falta para operaciones que usan <b>la misma máquina</b>. Una operación del torno y otra del fresado nunca chocan: no necesitan interruptor.</p>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 205" role="img" aria-label="Cada línea es un interruptor. El torno tiene 4 operaciones y 6 líneas, el fresado 5 operaciones y 10 líneas, la prueba 4 operaciones y 6 líneas. Total 22. Entre máquinas no hay líneas.">
+      <g>
+        <line class="edge" x1="55" y1="65" x2="145" y2="65"/><line class="edge" x1="55" y1="65" x2="145" y2="155"/><line class="edge" x1="55" y1="65" x2="55" y2="155"/>
+        <line class="edge" x1="145" y1="65" x2="145" y2="155"/><line class="edge" x1="145" y1="65" x2="55" y2="155"/><line class="edge" x1="145" y1="155" x2="55" y2="155"/>
+        <circle class="node" cx="55" cy="65" r="15"/><text class="t" x="55" y="69" text-anchor="middle">v1</text>
+        <circle class="node" cx="145" cy="65" r="15"/><text class="t" x="145" y="69" text-anchor="middle">v2</text>
+        <circle class="node" cx="145" cy="155" r="15"/><text class="t" x="145" y="159" text-anchor="middle">c2</text>
+        <circle class="node" cx="55" cy="155" r="15"/><text class="t" x="55" y="159" text-anchor="middle">f1</text>
+        <text class="t" x="100" y="22" text-anchor="middle" font-weight="600">torno</text>
+        <text class="ts" x="100" y="192" text-anchor="middle">4 operaciones → 6 líneas</text>
+      </g>
+      <g>
+        <line class="edge" x1="300" y1="57" x2="352" y2="95"/><line class="edge" x1="300" y1="57" x2="332" y2="157"/><line class="edge" x1="300" y1="57" x2="268" y2="157"/><line class="edge" x1="300" y1="57" x2="248" y2="95"/>
+        <line class="edge" x1="352" y1="95" x2="332" y2="157"/><line class="edge" x1="352" y1="95" x2="268" y2="157"/><line class="edge" x1="352" y1="95" x2="248" y2="95"/>
+        <line class="edge" x1="332" y1="157" x2="268" y2="157"/><line class="edge" x1="332" y1="157" x2="248" y2="95"/>
+        <line class="edge" x1="268" y1="157" x2="248" y2="95"/>
+        <circle class="node" cx="300" cy="57" r="15"/><text class="t" x="300" y="61" text-anchor="middle">v1</text>
+        <circle class="node" cx="352" cy="95" r="15"/><text class="t" x="352" y="99" text-anchor="middle">v2</text>
+        <circle class="node" cx="332" cy="157" r="15"/><text class="t" x="332" y="161" text-anchor="middle">c1</text>
+        <circle class="node" cx="268" cy="157" r="15"/><text class="t" x="268" y="161" text-anchor="middle">c2</text>
+        <circle class="node" cx="248" cy="95" r="15"/><text class="t" x="248" y="99" text-anchor="middle">f1</text>
+        <text class="t" x="300" y="22" text-anchor="middle" font-weight="600">fresado</text>
+        <text class="ts" x="300" y="192" text-anchor="middle">5 operaciones → 10 líneas</text>
+      </g>
+      <g>
+        <line class="edge" x1="455" y1="65" x2="545" y2="65"/><line class="edge" x1="455" y1="65" x2="545" y2="155"/><line class="edge" x1="455" y1="65" x2="455" y2="155"/>
+        <line class="edge" x1="545" y1="65" x2="545" y2="155"/><line class="edge" x1="545" y1="65" x2="455" y2="155"/><line class="edge" x1="545" y1="155" x2="455" y2="155"/>
+        <circle class="node" cx="455" cy="65" r="15"/><text class="t" x="455" y="69" text-anchor="middle">v1</text>
+        <circle class="node" cx="545" cy="65" r="15"/><text class="t" x="545" y="69" text-anchor="middle">v2</text>
+        <circle class="node" cx="545" cy="155" r="15"/><text class="t" x="545" y="159" text-anchor="middle">c2</text>
+        <circle class="node" cx="455" cy="155" r="15"/><text class="t" x="455" y="159" text-anchor="middle">c1</text>
+        <text class="t" x="500" y="22" text-anchor="middle" font-weight="600">prueba</text>
+        <text class="ts" x="500" y="192" text-anchor="middle">4 operaciones → 6 líneas</text>
+      </g>
+    </svg>
+    </div>
+    <figcaption>Cada línea es un par que puede chocar, y cada par lleva un interruptor <code>y</code> con sus dos paredes. 6 + 10 + 6 = <b>22 binarias</b>. Es el conjunto <code>D</code> del notebook: "pares con la misma máquina". Es el truco de la lección 4: crear solo los pares posibles.</figcaption>
+  </figure>
+
+  <h3>Restricción 3: el techo del makespan</h3>
+  <div class="rule">
+    <span><b>En notación:</b> <span class="f">C_max ≥ S[j, último] + p[j, último]</span> para cada trabajo</span>
+    <span><b>En español:</b> el taller cierra después de que termina cada trabajo. Minimizar <code>C_max</code> baja el techo hasta que toca al último.</span>
+  </div>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 160" role="img" aria-label="El plan óptimo del taller: termina en 14 horas. La línea de C max toca el último trabajo, el conector 2 en el fresado.">
+      <text class="t" x="100" y="36" text-anchor="end">torno</text>
+      <text class="t" x="100" y="68" text-anchor="end">fresado</text>
+      <text class="t" x="100" y="100" text-anchor="end">prueba</text>
+      <rect class="b2" x="110" y="20" width="64" height="24" rx="3"/><text class="tb" x="142" y="36" text-anchor="middle">v2</text>
+      <rect class="b1" x="174" y="20" width="96" height="24" rx="3"/><text class="tb" x="222" y="36" text-anchor="middle">v1</text>
+      <rect class="b5" x="270" y="20" width="160" height="24" rx="3"/><text class="tb" x="350" y="36" text-anchor="middle">f1</text>
+      <rect class="b4" x="430" y="20" width="96" height="24" rx="3"/><text class="tb" x="478" y="36" text-anchor="middle">c2</text>
+      <rect class="b3" x="110" y="52" width="128" height="24" rx="3"/><text class="tb" x="174" y="68" text-anchor="middle">c1</text>
+      <rect class="b2" x="238" y="52" width="128" height="24" rx="3"/><text class="tb" x="302" y="68" text-anchor="middle">v2</text>
+      <rect class="b1" x="366" y="52" width="64" height="24" rx="3"/><text class="tb" x="398" y="68" text-anchor="middle">v1</text>
+      <rect class="b5" x="430" y="52" width="64" height="24" rx="3"/><text class="tb" x="462" y="68" text-anchor="middle">f1</text>
+      <rect class="b4" x="526" y="52" width="32" height="24" rx="3"/><text class="tb" x="542" y="68" text-anchor="middle">c2</text>
+      <rect class="b4" x="110" y="84" width="64" height="24" rx="3"/><text class="tb" x="142" y="100" text-anchor="middle">c2</text>
+      <rect class="b2" x="174" y="84" width="32" height="24" rx="3"/><text class="tb" x="190" y="100" text-anchor="middle">v2</text>
+      <rect class="b3" x="238" y="84" width="96" height="24" rx="3"/><text class="tb" x="286" y="100" text-anchor="middle">c1</text>
+      <rect class="b1" x="430" y="84" width="64" height="24" rx="3"/><text class="tb" x="462" y="100" text-anchor="middle">v1</text>
+      <line class="wall" x1="558" y1="12" x2="558" y2="116"/>
+      <text class="ta" x="552" y="10" text-anchor="end">C_max = 14 h</text>
+      <line class="ax" x1="110" y1="124" x2="558" y2="124"/>
+      <g class="ts" text-anchor="middle"><text x="110" y="138">0</text><text x="174" y="138">2</text><text x="238" y="138">4</text><text x="302" y="138">6</text><text x="366" y="138">8</text><text x="430" y="138">10</text><text x="494" y="138">12</text><text x="558" y="138">14 h</text></g>
+    </svg>
+    </div>
+    <figcaption>El plan óptimo (el de CP-SAT del notebook; el MILP da el mismo). Ahora cada fila es una máquina y el color es el trabajo. El techo rojo no puede bajar de 14: el conector 2 termina ahí.</figcaption>
+  </figure>
+
+  <h3>La cota que el LP no ve</h3>
+  <p>El LP relajado del taller dice "se puede en 7 horas". La razón es la misma de antes: las paredes se aflojan y el LP solo respeta las rutas. Pero una suma de primaria sabe más:</p>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 125" role="img" aria-label="El torno tiene 13 horas de trabajo puestas en fila. Ningún orden lo achica. El LP solo ve la ruta más larga, 7 horas.">
+      <text class="t" x="100" y="36" text-anchor="end">torno</text>
+      <rect class="b2" x="110" y="20" width="64" height="24" rx="3"/><text class="tb" x="142" y="36" text-anchor="middle">2 h</text>
+      <rect class="b1" x="174" y="20" width="96" height="24" rx="3"/><text class="tb" x="222" y="36" text-anchor="middle">3 h</text>
+      <rect class="b4" x="270" y="20" width="96" height="24" rx="3"/><text class="tb" x="318" y="36" text-anchor="middle">3 h</text>
+      <rect class="b5" x="366" y="20" width="160" height="24" rx="3"/><text class="tb" x="446" y="36" text-anchor="middle">5 h</text>
+      <line class="ax" x1="110" y1="54" x2="526" y2="54"/><line class="ax" x1="110" y1="49" x2="110" y2="59"/><line class="ax" x1="526" y1="49" x2="526" y2="59"/>
+      <text class="t" x="318" y="72" text-anchor="middle">13 h: en cualquier orden, la fila mide lo mismo</text>
+      <text class="t" x="100" y="100" text-anchor="end">LP</text>
+      <rect class="bf" x="110" y="88" width="224" height="16" rx="3"/>
+      <text class="ts" x="342" y="100">7 h: lo que ve el LP</text>
+    </svg>
+    </div>
+    <figcaption>Cota simple = la máquina más cargada = 13 h, a 1 hora del óptimo (14). La cota del LP es 7 h. Esta idea de "sumar lo que hay en cada máquina" es justo lo que hace CP-SAT por dentro.</figcaption>
+  </figure>
+
+  <!-- ============ 5 ============ -->
+  <h2>3. CP-SAT: bloques en un estante <span class="tag">notebook §5</span></h2>
+  <p>CP-SAT es otro tipo de solver. No usa interruptores ni paredes con M. Trabaja con <b>intervalos</b>: un bloque con inicio, duración y fin. Y con una regla que entiende de verdad:</p>
+  <div class="rule">
+    <span><b>NoOverlap(bloques del torno):</b> los bloques del torno van en fila, sin pisarse.</span>
+    <span>En código: <code>model.add_no_overlap([...])</code>, una línea por máquina. Reemplaza las 22 binarias y sus 44 paredes.</span>
+  </div>
+  <p>Como sabe que los bloques van en fila, CP-SAT ve de entrada la cota de 13 h del dibujo anterior. Después prueba órdenes y <b>tacha</b> horas imposibles, como en un sudoku: "si v1 ya ocupa el torno de 2 a 5, el forjado no puede empezar ahí a las 3 ni a las 4: se pisarían".</p>
+  <p>Resultado en el notebook: con 40 trabajos y 5 máquinas, el MILP se queda con 87 % de gap a los 10 s. CP-SAT encuentra y demuestra el óptimo en 0,03 s.</p>
+
+  <!-- ============ 7 ============ -->
+  <h2>4. Barcos en el Báltico <span class="tag">notebook §7</span></h2>
+  <p>Ahora no hay horas sino <b>días</b>. 3 barcos (grúa A, jack-up B, cable C), 8 proyectos y 36 días. Siete días tienen mal tiempo: nadie trabaja en el mar. Un proyecto no puede tener un día de mal tiempo en el medio.</p>
+  <p>Aquí se cambia la pregunta. En vez de "¿quién va antes?", se pregunta <b>"¿qué día empieza y con qué barco?"</b>.</p>
+  <div class="rule">
+    <span><b>La variable:</b> <span class="f">x[p, v, t] = 1</span> si el proyecto p empieza el día t con el barco v.</span>
+    <span>Una binaria por cada combinación posible de (proyecto, barco, día).</span>
+  </div>
+
+  <h3>Paso 0: crear solo los inicios posibles</h3>
+  <p>Ejemplo: las turbinas de BW1. Duran 8 días, solo las puede hacer el jack-up y están listas desde el día 8.</p>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 150" role="img" aria-label="De todos los días de inicio, las turbinas solo pueden empezar el 27 o el 28: cualquier otro inicio pisa un día de mal tiempo o no cabe en los 36 días.">
+      <g>
+        <rect class="bad" x="178" y="22" width="14" height="20"/><rect class="bad" x="192" y="22" width="14" height="20"/>
+        <rect class="bad" x="290" y="22" width="14" height="20"/><rect class="bad" x="304" y="22" width="14" height="20"/><rect class="bad" x="318" y="22" width="14" height="20"/>
+        <rect class="bad" x="430" y="22" width="14" height="20"/><rect class="bad" x="444" y="22" width="14" height="20"/>
+        <rect x="80" y="22" width="504" height="20" fill="none" stroke="var(--line)"/>
+      </g>
+      <text class="ts" x="72" y="36" text-anchor="end">clima</text>
+      <line class="ax" x1="192" y1="14" x2="192" y2="50" stroke-width="1.5"/>
+      <text class="t" x="196" y="12">listo: día 8</text>
+      <text class="ts" x="72" y="68" text-anchor="end">inicio</text>
+      <g class="al" stroke-width="1.5">
+        <path d="M195,60 l8,8 M203,60 l-8,8"/><path d="M209,60 l8,8 M217,60 l-8,8"/><path d="M223,60 l8,8 M231,60 l-8,8"/>
+        <path d="M237,60 l8,8 M245,60 l-8,8"/><path d="M251,60 l8,8 M259,60 l-8,8"/><path d="M265,60 l8,8 M273,60 l-8,8"/>
+        <path d="M279,60 l8,8 M287,60 l-8,8"/><path d="M293,60 l8,8 M301,60 l-8,8"/><path d="M307,60 l8,8 M315,60 l-8,8"/>
+        <path d="M321,60 l8,8 M329,60 l-8,8"/><path d="M335,60 l8,8 M343,60 l-8,8"/><path d="M349,60 l8,8 M357,60 l-8,8"/>
+        <path d="M363,60 l8,8 M371,60 l-8,8"/><path d="M377,60 l8,8 M385,60 l-8,8"/><path d="M391,60 l8,8 M399,60 l-8,8"/>
+        <path d="M405,60 l8,8 M413,60 l-8,8"/><path d="M419,60 l8,8 M427,60 l-8,8"/><path d="M433,60 l8,8 M441,60 l-8,8"/>
+        <path d="M447,60 l8,8 M455,60 l-8,8"/>
+      </g>
+      <circle class="okf" cx="465" cy="64" r="5"/><circle class="okf" cx="479" cy="64" r="5"/>
+      <text class="ts" x="492" y="68">≥ 29: no cabe</text>
+      <rect x="332" y="86" width="112" height="16" fill="none" stroke="var(--accent)" stroke-width="2"/>
+      <rect class="lateb" x="430" y="86" width="14" height="16" opacity="0.5"/>
+      <text class="ta" x="444" y="118" text-anchor="end">inicio 18 ✗: pisa el día 25</text>
+      <rect x="458" y="86" width="112" height="16" class="okf" opacity="0.35"/>
+      <rect x="458" y="86" width="112" height="16" class="okl"/>
+      <text class="tok" x="458" y="118">inicio 27 ✓</text>
+      <line class="ax" x1="80" y1="128" x2="584" y2="128"/>
+      <g class="ts" text-anchor="middle"><text x="87" y="142">0</text><text x="157" y="142">5</text><text x="227" y="142">10</text><text x="297" y="142">15</text><text x="367" y="142">20</text><text x="437" y="142">25</text><text x="507" y="142">30</text><text x="577" y="142">35</text></g>
+    </svg>
+    </div>
+    <figcaption>Gris = mal tiempo (días 7, 8, 15, 16, 17, 25 y 26). Del día 8 al 26, todo inicio pisa un día gris dentro de sus 8 días (×). Solo quedan el 27 y el 28 (●). El modelo crea <b>2 binarias</b> para las turbinas, no 36. Es lo que hace <code>inicios_factibles()</code> con un join y un filtro: de 432 combinaciones quedan 128.</figcaption>
+  </figure>
+  <p>La gran ventaja: todo lo que depende del día (clima, multa por retraso, costo del barco) se calcula <b>antes</b>, como un número por fila. El modelo no necesita M.</p>
+
+  <h3>Restricción 1: cada proyecto, una sola vez</h3>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 92" role="img" aria-label="Para las turbinas: empezar el 27, empezar el 28 o aplazar. Exactamente una de las tres vale 1.">
+      <rect class="chip s4" x="10" y="16" width="160" height="36" rx="6"/><text class="t" x="90" y="38" text-anchor="middle">x[turbinas, B, 27]</text>
+      <text class="t" x="185" y="40" text-anchor="middle" font-size="18">+</text>
+      <rect class="chip s4" x="200" y="16" width="160" height="36" rx="6"/><text class="t" x="280" y="38" text-anchor="middle">x[turbinas, B, 28]</text>
+      <text class="t" x="375" y="40" text-anchor="middle" font-size="18">+</text>
+      <rect class="chip" x="390" y="16" width="150" height="36" rx="6" stroke="var(--muted)" stroke-dasharray="4 3"/><text class="t" x="465" y="38" text-anchor="middle">u[turbinas]</text>
+      <text class="t" x="572" y="40" text-anchor="middle" font-size="18">= 1</text>
+      <text class="ts" x="300" y="78" text-anchor="middle">u = aplazar al mes siguiente (cuesta 3.000.000 €): el modelo elástico de la lección 4</text>
+    </svg>
+    </div>
+    <figcaption>Suma de todos sus inicios posibles + aplazar = 1. Exactamente una casilla se prende.</figcaption>
+  </figure>
+
+  <h3>Restricción 2: un barco, un proyecto por día</h3>
+  <div class="rule">
+    <span><b>En español:</b> para cada barco y cada día, de todos los inicios que <b>ocuparían</b> ese día, a lo más uno se elige.</span>
+    <span>Un proyecto que empezó el día s sigue en el barco el día t si <span class="f">s ≤ t &lt; s + duración</span>.</span>
+  </div>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 182" role="img" aria-label="Para el jack-up el día 10 hay cuatro inicios que lo ocuparían. La restricción dice que a lo más uno se elige.">
+      <rect class="bad" x="110" y="20" width="30" height="128"/><rect class="bad" x="140" y="20" width="30" height="128"/>
+      <rect class="bad" x="350" y="20" width="30" height="128"/><rect class="bad" x="380" y="20" width="30" height="128"/><rect class="bad" x="410" y="20" width="30" height="128"/>
+      <rect class="band" x="200" y="16" width="30" height="136"/>
+      <rect class="hl" x="200" y="16" width="30" height="136"/>
+      <rect class="b3" x="170" y="28" width="180" height="22" rx="3"/><text class="tb" x="260" y="43" text-anchor="middle">cimentación BW1, empieza 9</text>
+      <rect class="b3" x="170" y="58" width="180" height="22" rx="3"/><text class="tb" x="260" y="73" text-anchor="middle">cimentación BW2, empieza 9</text>
+      <rect class="b2" x="170" y="88" width="90" height="22" rx="3"/><text class="tb" x="215" y="103" text-anchor="middle">reparación, 9</text>
+      <rect class="b2" x="200" y="118" width="90" height="22" rx="3"/><text class="tb" x="245" y="133" text-anchor="middle">reparación, 10</text>
+      <text class="ta" x="215" y="12" text-anchor="middle">día 10</text>
+      <text class="t" x="452" y="62">jack-up, día 10:</text>
+      <text class="ta" x="452" y="80">estos 4 suman ≤ 1</text>
+      <text class="ts" x="452" y="104">el plan elige</text>
+      <text class="ts" x="452" y="118">cimentación BW2</text>
+      <line class="ax" x1="80" y1="160" x2="560" y2="160"/>
+      <g class="ts" text-anchor="middle"><text x="95" y="174">6</text><text x="155" y="174">8</text><text x="215" y="174">10</text><text x="275" y="174">12</text><text x="335" y="174">14</text><text x="395" y="174">16</text><text x="455" y="174">18</text><text x="515" y="174">20</text></g>
+    </svg>
+    </div>
+    <figcaption>Una fila del modelo = un barco en un día. La columna roja corta todos los inicios que estarían en el jack-up ese día. Es como la cobertura de tu red de turnos de Siigo: un bloque de tiempo, una fila.</figcaption>
+  </figure>
+
+  <h3>Restricción 3: las turbinas, después de las cimentaciones</h3>
+  <div class="rule">
+    <span><b>En notación:</b> <span class="f">Σ t·x[turbinas, v, t] ≥ Σ (t + 6)·x[cimentación BW1, v, t]</span></span>
+    <span><b>En español:</b> como solo un <code>x</code> de cada proyecto vale 1, "Σ t·x" es simplemente <b>el día en que empieza</b>. Se lee: día de inicio de turbinas ≥ día en que terminan las cimentaciones.</span>
+  </div>
+
+  <h3>El plan que sale</h3>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 165" role="img" aria-label="El plan de 36 días: el jack-up hace las dos cimentaciones y las turbinas, que llegan 11 días tarde. La grúa hace la reparación y la subestación. El barco de cable hace los tres cables.">
+      <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+      <rect class="bad" x="178" y="22" width="14" height="112"/><rect class="bad" x="192" y="22" width="14" height="112"/>
+      <rect class="bad" x="290" y="22" width="14" height="112"/><rect class="bad" x="304" y="22" width="14" height="112"/><rect class="bad" x="318" y="22" width="14" height="112"/>
+      <rect class="bad" x="430" y="22" width="14" height="112"/><rect class="bad" x="444" y="22" width="14" height="112"/>
+      <text class="t" x="72" y="46" text-anchor="end">grúa A</text>
+      <text class="t" x="72" y="82" text-anchor="end">jack-up B</text>
+      <text class="t" x="72" y="118" text-anchor="end">cable C</text>
+      <rect class="b2" x="122" y="30" width="42" height="24" rx="3"/><text class="tb" x="143" y="46" text-anchor="middle">rep.</text>
+      <rect class="b4" x="206" y="30" width="70" height="24" rx="3"/><text class="tb" x="241" y="46" text-anchor="middle">subest.</text>
+      <rect class="b3" x="80" y="66" width="84" height="24" rx="3"/><text class="tb" x="122" y="82" text-anchor="middle">cim. 1</text>
+      <rect class="b3" x="206" y="66" width="84" height="24" rx="3"/><text class="tb" x="248" y="82" text-anchor="middle">cim. 2</text>
+      <rect class="b5" x="458" y="66" width="112" height="24" rx="3"/><text class="tb" x="514" y="82" text-anchor="middle">turbinas</text>
+      <rect class="b1" x="80" y="102" width="98" height="24" rx="3"/><text class="tb" x="129" y="118" text-anchor="middle">cable 1</text>
+      <rect class="b1" x="220" y="102" width="70" height="24" rx="3"/><text class="tb" x="255" y="118" text-anchor="middle">array 2</text>
+      <rect class="b1" x="332" y="102" width="84" height="24" rx="3"/><text class="tb" x="374" y="118" text-anchor="middle">cable 2</text>
+      <line class="due" x1="416" y1="56" x2="416" y2="96"/>
+      <rect class="lateb" x="416" y="61" width="154" height="4"/>
+      <text class="ta" x="410" y="64" text-anchor="end">+11 días tarde</text>
+      <path class="ax" d="M164,91 C 260,100 370,100 456,91" marker-end="url(#ah3)" stroke-width="1.4"/>
+      <line class="ax" x1="80" y1="138" x2="584" y2="138"/>
+      <g class="ts" text-anchor="middle"><text x="87" y="152">0</text><text x="157" y="152">5</text><text x="227" y="152">10</text><text x="297" y="152">15</text><text x="367" y="152">20</text><text x="437" y="152">25</text><text x="507" y="152">30</text><text x="577" y="152">35</text></g>
+    </svg>
+    </div>
+    <figcaption>Costo: 3.210.000 €. La curva bajo el jack-up es la precedencia (cimentación BW1 antes de turbinas). Las turbinas necesitan 8 días buenos seguidos con el jack-up: el primer hueco empieza el día 27, así que llegan 11 días tarde (660.000 € de multa). Ningún orden lo evita: es el clima.</figcaption>
+  </figure>
+
+  <h3>Por qué este modelo sí es fuerte</h3>
+  <p>En el banco, con interruptores a ½, cada pared se aflojaba 7 horas y los trabajos se pisaban "gratis". Aquí, si el LP pone ½ a la cimentación BW2 y ½ a la reparación el mismo día, la fila de ese día ya suma 1: <b>el día está lleno</b>. No hay forma de esconder un choque. Por eso el LP de los barcos da el mismo costo que el MILP: 3.210.000 €.</p>
+  <p>El precio: una binaria por día posible. Con días está bien; con minutos y un año entero, el modelo explota.</p>
+
+  <!-- ============ 8 ============ -->
+  <h2>5. ¿Cuál uso? <span class="tag">notebook §8</span></h2>
+  <div class="rule">
+    <span><b>Si el problema es sobre todo orden en máquinas compartidas, empieza con CP-SAT. Si el tiempo es grueso (días, turnos) y los costos dependen del día, usa un MILP indexado en el tiempo.</b></span>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Problema</th><th>Variable</th><th>Cómo evita choques</th><th>Cota del LP</th></tr></thead>
+    <tbody>
+      <tr><td>Banco y taller con big-M</td><td>interruptor <code>y</code> por par</td><td>dos paredes con M</td><td class="late">débil (0 h y 7 h)</td></tr>
+      <tr><td>Taller con CP-SAT</td><td>bloque (intervalo)</td><td><code>NoOverlap</code> por máquina</td><td>no usa LP; ve la carga de la máquina</td></tr>
+      <tr><td>Barcos indexados en el tiempo</td><td><code>x[p, v, t]</code></td><td>una fila por barco y día</td><td class="okc">fuerte (igual al óptimo)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Mapa para volver al notebook</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Celda del notebook</th><th>Qué mirar con los dibujos de aquí</th></tr></thead>
+    <tbody>
+      <tr><td><code>retraso_total()</code> y la fuerza bruta (§2, §2.1)</td><td>el dibujo de los dos órdenes: 9 h contra 6 h</td></tr>
+      <tr><td><code>una_maquina()</code> (§3)</td><td><code>m.retraso</code> = los dos pisos; <code>m.antes</code> y <code>m.despues</code> = pared 1 y pared 2</td></tr>
+      <tr><td>El bucle con M = 14, 100, 10.000 (§3.1)</td><td>el dibujo de la cortina: cota 0 con cualquier M</td></tr>
+      <tr><td><code>jobshop_milp()</code> (§4)</td><td><code>m.ruta</code> = la flecha de espera; <code>m.D</code> = las 22 líneas; <code>m.fin</code> = el techo</td></tr>
+      <tr><td><code>jobshop_cp()</code> (§5)</td><td>el estante del torno: <code>add_no_overlap</code></td></tr>
+      <tr><td><code>inicios_factibles()</code> (§7.1)</td><td>los × y ● de las turbinas</td></tr>
+      <tr><td><code>barcos_milp()</code> (§7)</td><td><code>m.una_vez</code> = las tres casillas; <code>m.barco_dia</code> = la columna roja del día 10; <code>m.prec</code> = la curva</td></tr>
+    </tbody>
+  </table></div>
+  <p>Si una celda sigue sin cerrar, pégame la celda y su salida y la dibujamos juntos.</p>
+</div>
+</body>
+</html>
