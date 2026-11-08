@@ -16,6 +16,7 @@ Si una celda no se entiende, pega la celda y su salida en el chat y la vemos jun
 
 **Apoyo con dibujos:** `06_secuenciacion_dibujos.html` explica la lección 7 con un dibujo por cada restricción (retraso, disyuntiva con big-M, job shop, CP-SAT y barcos). Descárgalo y ábrelo en el navegador; al final trae un mapa a las celdas del notebook.
 `07_incertidumbre_dibujos.html` hace lo mismo con la lección 8: escenarios, costo esperado como área, árbol de 2 etapas, EVPI y VSS, Monte Carlo y SAA, muelles y repuestos en 3 bases.
+`benders_dibujos.html` explica la descomposición de Benders con los repuestos de la lección 8 (maestro, subproblemas, cortes, cotas). Su código está en `python/benders_repuestos.py`: 3 escenarios en 3 iteraciones y 10.000 inviernos en 5.
 
 ## Notación matemática
 Cada problema trae su formulación como se escribe en un libro o en una entrevista, justo al lado de su versión en palabras y en Pyomo.

@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Benders en dibujos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: una columna de lectura, como un cuaderno de taller; cada restricción es un dibujo con su regla debajo. */
+:root {
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --fg: #18202b;
+  --muted: #5d6878;
+  --line: #c8d0da;
+  --accent: #d4462f;      /* retraso, prohibido */
+  --ok: #2b8a57;          /* permitido */
+  --day-bad: #d7dce3;     /* mal tiempo */
+  --j1: #6f9fe6; --j2: #efc15a; --j3: #5cc2b3; --j4: #b48ae0; --j5: #a8c46a;
+  --faint: #e3e8ee;
+  --on-bar: #121820;
+  --display: "Archivo", "Arial Narrow", Arial, sans-serif;
+  --body: "Source Sans 3", "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12161c; --surface: #1a2029; --fg: #e7ebf1; --muted: #9ba6b5; --line: #343d4a;
+    --accent: #ff6d55; --ok: #4fc58c; --day-bad: #2c333d; --faint: #232a34;
+    --j1: #7aa8ee; --j2: #f2c768; --j3: #66cbbd; --j4: #bf98ea; --j5: #b3cf74;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12161c; --surface: #1a2029; --fg: #e7ebf1; --muted: #9ba6b5; --line: #343d4a;
+  --accent: #ff6d55; --ok: #4fc58c; --day-bad: #2c333d; --faint: #232a34;
+  --j1: #7aa8ee; --j2: #f2c768; --j3: #66cbbd; --j4: #bf98ea; --j5: #b3cf74;
+  color-scheme: dark;
+}
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 17px; line-height: 1.55; }
+.wrap { max-width: 760px; margin: 0 auto; padding-block: 32px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 18px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; line-height: 1.15; margin: 0; }
+h1 { font-size: clamp(30px, 6vw, 44px); font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: 26px; font-weight: 800; margin-top: 28px; padding-top: 18px; border-top: 2px solid var(--fg); }
+h3 { font-size: 19px; font-weight: 600; margin-top: 8px; }
+p, ul, ol { margin: 0; max-width: 65ch; }
+ul, ol { padding-left: 22px; display: flex; flex-direction: column; gap: 4px; }
+.lead { font-size: 19px; color: var(--muted); }
+.tag { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+code, .f { font-family: var(--mono); font-size: 0.88em; }
+.f { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; white-space: nowrap; }
+.rule { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--fg); border-radius: 4px; padding: 12px 16px; display: flex; flex-direction: column; gap: 6px; max-width: 65ch; }
+.rule .f { background: var(--bg); }
+.rule b { font-family: var(--display); font-weight: 600; }
+.ana { color: var(--muted); font-style: italic; }
+figure { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.fig { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+figure svg { display: block; width: 100%; min-width: 520px; height: auto; color: var(--fg); font-family: var(--mono); }
+figcaption { font-size: 15px; color: var(--muted); max-width: 65ch; }
+table { border-collapse: collapse; font-size: 15px; width: 100%; }
+.tbl { overflow-x: auto; }
+th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--display); font-weight: 600; font-size: 14px; }
+td.n { font-variant-numeric: tabular-nums; }
+.late { color: var(--accent); font-weight: 600; }
+.okc { color: var(--ok); font-weight: 600; }
+/* clases del dibujo */
+.ax { stroke: currentColor; stroke-width: 1; fill: none; }
+.tick { stroke: currentColor; stroke-width: 1; }
+.t { fill: currentColor; font-size: 12px; }
+.ts { fill: var(--muted); font-size: 11px; }
+.tb { fill: var(--on-bar); font-size: 11px; font-weight: 600; }
+.ta { fill: var(--accent); font-size: 12px; font-weight: 600; }
+.tok { fill: var(--ok); font-size: 12px; font-weight: 600; }
+.b1 { fill: var(--j1); } .b2 { fill: var(--j2); } .b3 { fill: var(--j3); } .b4 { fill: var(--j4); } .b5 { fill: var(--j5); }
+.bf { fill: var(--faint); stroke: var(--line); }
+.due { stroke: currentColor; stroke-width: 1.4; stroke-dasharray: 3 3; }
+.lateb { fill: var(--accent); }
+.wall { stroke: var(--accent); stroke-width: 3; }
+.off { stroke: var(--muted); stroke-width: 2; stroke-dasharray: 5 4; }
+.bad { fill: var(--day-bad); }
+.okf { fill: var(--ok); }
+.okl { stroke: var(--ok); stroke-width: 2; fill: none; }
+.al { stroke: var(--accent); stroke-width: 2; fill: none; }
+.chip { fill: var(--surface); stroke-width: 2; }
+.s1 { stroke: var(--j1); } .s2 { stroke: var(--j2); } .s3 { stroke: var(--j3); } .s4 { stroke: var(--j4); } .s5 { stroke: var(--j5); }
+.node { fill: var(--surface); stroke: currentColor; stroke-width: 1.4; }
+.edge { stroke: var(--muted); stroke-width: 1.4; }
+.band { fill: var(--accent); opacity: 0.12; }
+.hl { fill: none; stroke: var(--accent); stroke-width: 2.5; }
+@media (max-width: 480px) { body { font-size: 16px; } h2 { font-size: 22px; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:10px">
+    <span class="tag">Complemento de la lección 8 · python/benders_repuestos.py</span>
+    <h1>Benders en dibujos</h1>
+    <p class="lead">Descomposición de Benders: cómo resolver un modelo enorme partiéndolo en un jefe que decide y varios ayudantes que evalúan. Con el mismo problema de repuestos de la lección 8.</p>
+  </header>
+
+  <h2>La idea en una frase</h2>
+  <p><b>Un jefe propone un plan. Cada ayudante lo prueba en su escenario y le devuelve una nota: "con tu plan me cuesta tanto, y por cada módulo más ahorraría tanto". El jefe guarda las notas y propone otra vez. Para cuando lo que cree el jefe coincide con lo que cuesta de verdad.</b></p>
+  <p class="ana">La Wigilia otra vez. Tú vas al supermercado y decides cuánta harina comprar: eres el jefe. En casa, la babcia prueba tu cantidad en tres casos: vienen pocos, vienen los de siempre, vienen todos los primos de Gdańsk. Para cada caso te dice cuánto faltaría y cuánto ahorraría un kilo más. Con esas notas vuelves a decidir. No necesitas saber cocinar pierogi: solo leer las notas.</p>
+  <p>El nombre técnico: el jefe es el <b>problema maestro</b> (<i>master problem</i>); cada ayudante es un <b>subproblema</b>; cada nota es un <b>corte</b> (<i>Benders cut</i>).</p>
+
+  <!-- ============ 1 ============ -->
+  <h2>1. Por qué partir el modelo</h2>
+  <p>En la lección 8, el modelo de 2 etapas con 1.000 inviernos tenía 16.006 variables. Pero tiene una forma muy especial: la decisión de hoy (<code>q</code>, el stock) toca <b>todos</b> los inviernos; los inviernos no se tocan entre sí.</p>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 230" role="img" aria-label="La matriz del modelo de dos etapas tiene una columna q que toca todos los inviernos y un bloque por invierno en la diagonal. Si se fija q, quedan bloques independientes.">
+      <defs><marker id="ba" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+      <text class="ts" x="75" y="32" text-anchor="middle">q</text>
+      <text class="ts" x="130" y="32" text-anchor="middle">invierno 1</text>
+      <text class="ts" x="210" y="32" text-anchor="middle">invierno 2</text>
+      <text class="ts" x="290" y="32" text-anchor="middle">invierno 3</text>
+      <rect x="60" y="40" width="270" height="150" fill="none" stroke="var(--line)"/>
+      <rect class="lateb" x="60" y="40" width="30" height="150" opacity="0.85"/>
+      <rect class="b3" x="90" y="40" width="80" height="50"/>
+      <rect class="b2" x="170" y="90" width="80" height="50"/>
+      <rect class="b4" x="250" y="140" width="80" height="50"/>
+      <text class="tb" x="130" y="69" text-anchor="middle">envíos 1</text>
+      <text class="tb" x="210" y="119" text-anchor="middle">envíos 2</text>
+      <text class="tb" x="290" y="169" text-anchor="middle">envíos 3</text>
+      <text class="ts" x="195" y="210" text-anchor="middle">forma extendida: un solo modelo grande</text>
+      <line class="ax" x1="345" y1="115" x2="415" y2="115" marker-end="url(#ba)"/>
+      <text class="ta" x="380" y="106" text-anchor="middle">fijo q</text>
+      <rect class="b3" x="430" y="40" width="80" height="40"/><text class="tb" x="470" y="64" text-anchor="middle">invierno 1</text>
+      <rect class="b2" x="430" y="95" width="80" height="40"/><text class="tb" x="470" y="119" text-anchor="middle">invierno 2</text>
+      <rect class="b4" x="430" y="150" width="80" height="40"/><text class="tb" x="470" y="174" text-anchor="middle">invierno 3</text>
+      <text class="ts" x="470" y="210" text-anchor="middle">3 problemas chicos, sueltos</text>
+    </svg>
+    </div>
+    <figcaption>Cada fila de bloques son las restricciones de un invierno; cada columna, sus variables. La columna roja (<code>q</code>) es lo único que amarra los inviernos. Si alguien fija <code>q</code>, el modelo se rompe en pedazos que se resuelven por separado, incluso en paralelo. Esa forma se llama <b>bloque angular</b> o "en escalera".</figcaption>
+  </figure>
+
+  <!-- ============ 2 ============ -->
+  <h2>2. El jefe y los ayudantes, con los repuestos</h2>
+  <p>El problema de siempre: comprar <code>q</code> módulos a 40 mil € hoy; en cada invierno, lo que falte va de urgencia a 250 mil €. Inviernos: suave (0,4 · 0 fallas), normal (0,4 · 2), duro (0,2 · 6). El óptimo, que ya conoces, es 6 módulos y 240 mil €.</p>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 220" role="img" aria-label="El maestro propone q a los tres subproblemas. Cada uno devuelve su costo de urgencias y su precio sombra. Con eso el maestro agrega un corte y vuelve a proponer.">
+      <defs><marker id="bb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+      <rect class="chip" x="20" y="70" width="190" height="80" rx="8" stroke="currentColor"/>
+      <text class="t" x="115" y="94" text-anchor="middle" font-weight="600">Maestro (el jefe)</text>
+      <text class="t" x="115" y="114" text-anchor="middle">min 40·q + θ</text>
+      <text class="ts" x="115" y="132" text-anchor="middle">s.a. los cortes recibidos</text>
+      <rect class="chip s3" x="400" y="20" width="180" height="44" rx="8"/><text class="t" x="490" y="38" text-anchor="middle">invierno suave</text><text class="ts" x="490" y="54" text-anchor="middle">min 250·e, e ≥ 0 − q</text>
+      <rect class="chip s2" x="400" y="88" width="180" height="44" rx="8"/><text class="t" x="490" y="106" text-anchor="middle">invierno normal</text><text class="ts" x="490" y="122" text-anchor="middle">min 250·e, e ≥ 2 − q</text>
+      <rect class="chip s4" x="400" y="156" width="180" height="44" rx="8"/><text class="t" x="490" y="174" text-anchor="middle">invierno duro</text><text class="ts" x="490" y="190" text-anchor="middle">min 250·e, e ≥ 6 − q</text>
+      <line class="ax" x1="390" y1="42" x2="390" y2="178"/>
+      <line class="ax" x1="214" y1="96" x2="386" y2="96" marker-end="url(#bb)" stroke-width="1.6"/>
+      <text class="t" x="300" y="88" text-anchor="middle">1. propone q</text>
+      <line class="ax" x1="386" y1="126" x2="214" y2="126" marker-end="url(#bb)" stroke-width="1.6"/>
+      <text class="ta" x="300" y="144" text-anchor="middle">2. devuelven costo y</text>
+      <text class="ta" x="300" y="158" text-anchor="middle">precio sombra → 1 corte</text>
+    </svg>
+    </div>
+    <figcaption>El maestro solo tiene 2 variables: <code>q</code> y <code>θ</code> ("theta"), lo que <b>cree</b> que costarán las urgencias. Al principio no sabe nada, así que cree θ = 0. Cada subproblema tiene 1 variable y 1 restricción.</figcaption>
+  </figure>
+
+  <h3>Qué trae la nota: el precio sombra</h3>
+  <p>Cada subproblema, con <code>q</code> fijo, responde dos cosas:</p>
+  <ul>
+    <li><b>Cuánto le cuesta:</b> 250 × lo que falta.</li>
+    <li><b>Cuánto ahorraría con un módulo más:</b> es el <b>precio sombra</b> de su restricción (lección 2). Vale 250 si le falta algo; 0 si le sobra.</li>
+  </ul>
+  <p>Ejemplo con <code>q = 0</code>: al invierno suave no le falta nada (precio 0). Al normal le faltan 2 y al duro 6 (precio 250 en los dos). Un módulo extra ahorra en promedio 0,4·250 + 0,2·250 = <b>150 mil €</b>. Las urgencias esperadas con q = 0 son <b>500 mil €</b>. La nota dice:</p>
+  <div class="rule"><span><b>Corte 1:</b> <span class="f">θ ≥ 500 − 150·q</span>. "Con q = 0 las urgencias cuestan 500, y cada módulo que agregues las baja a lo más 150".</span></div>
+
+  <h3>Un corte es una regla que nunca exagera</h3>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 260" role="img" aria-label="La curva real de urgencias esperadas y los dos cortes. El corte 1, hecho en q = 0, coincide con la curva hasta q = 2. El corte 2, hecho en q = 4, coincide de 2 a 6. Ningún corte pasa por encima de la curva.">
+<line class="ax" x1="60" y1="220" x2="530" y2="220"/><line class="ax" x1="60" y1="30" x2="60" y2="220"/>
+<g class="ts" text-anchor="end"><text x="54" y="224">0</text><text x="54" y="152">200</text><text x="54" y="80">400</text><text x="54" y="24">mil €</text></g>
+<polyline fill="none" stroke="var(--line)" stroke-width="10" stroke-linejoin="round" points="70.0,40.0 125.0,94.0 180.0,148.0 235.0,166.0 290.0,184.0 345.0,202.0 400.0,220.0 455.0,220.0 510.0,220.0"/>
+<line x1="70" y1="40.0" x2="253.3" y2="220.0" stroke="var(--accent)" stroke-width="2.5"/>
+<line x1="70" y1="112.0" x2="400" y2="220.0" stroke="var(--j1)" stroke-width="2.5"/>
+<circle cx="70" cy="40.0" r="5" class="lateb"/>
+<circle cx="290" cy="184.0" r="5" style="fill:var(--j1)"/>
+<text class="ta" x="136" y="83">corte 1: θ ≥ 500 − 150·q</text>
+<text class="ts" x="136" y="97">(hecho en q = 0)</text>
+<text class="t" x="296" y="140" style="fill:var(--j1)" font-weight="600">corte 2: θ ≥ 300 − 50·q</text>
+<text class="ts" x="296" y="154">(hecho en q = 4)</text>
+<text class="ts" x="411" y="198">gris: la curva real,</text><text class="ts" x="411" y="212">que el maestro no ve</text>
+<g class="ts" text-anchor="middle"><text x="70" y="238">0</text><text x="125" y="238">1</text><text x="180" y="238">2</text><text x="235" y="238">3</text><text x="290" y="238">4</text><text x="345" y="238">5</text><text x="400" y="238">6</text><text x="455" y="238">7</text><text x="510" y="238">8</text></g>
+<text class="ts" x="530" y="238">q</text>
+<text class="ts" x="70" y="254">urgencias esperadas según los módulos comprados</text>
+</svg>
+    </div>
+    <figcaption>La curva gris es el costo real de las urgencias según cuántos módulos compres. El maestro no la conoce: solo ve las rectas (cortes) que le mandan. Cada recta toca la curva en el punto donde se hizo y queda <b>por debajo</b> en todo lo demás. Por eso el maestro siempre es optimista: su vista es un piso que va subiendo con cada nota. Con 2 cortes, en este problema, el piso ya es la curva entera.</figcaption>
+  </figure>
+
+  <!-- ============ 3 ============ -->
+  <h2>3. Las tres iteraciones</h2>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 240" role="img" aria-label="Lo que cree el maestro en cada iteración contra el costo real. Sin cortes cree que no comprar nada cuesta 0. Con un corte elige 4 y cree 160. Con dos cortes su curva coincide con la real y elige 6, 240.">
+<text class="t" x="30" y="18" font-weight="600">1 · sin cortes</text>
+<line class="ax" x1="26" y1="190" x2="192" y2="190"/>
+<polyline fill="none" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="4 3" points="30.0,50.0 49.5,80.8 69.0,111.6 88.5,114.4 108.0,117.2 127.5,120.0 147.0,122.8 166.5,111.6 186.0,100.4"/>
+<polyline fill="none" stroke="var(--accent)" stroke-width="2.2" points="30.0,190.0 49.5,178.8 69.0,167.6 88.5,156.4 108.0,145.2 127.5,134.0 147.0,122.8 166.5,111.6 186.0,100.4"/>
+<circle cx="30.0" cy="190.0" r="5.5" class="okf"/>
+<text class="tok" x="30" y="215">propone q = 0</text>
+<text class="ts" x="30" y="230">cree 0 · real 500</text>
+<g class="ts" text-anchor="middle"><text x="30.0" y="203">0</text><text x="108.0" y="203">4</text><text x="186.0" y="203">8</text></g>
+<text class="t" x="225" y="18" font-weight="600">2 · con el corte 1</text>
+<line class="ax" x1="221" y1="190" x2="387" y2="190"/>
+<polyline fill="none" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="4 3" points="225.0,50.0 244.5,80.8 264.0,111.6 283.5,114.4 303.0,117.2 322.5,120.0 342.0,122.8 361.5,111.6 381.0,100.4"/>
+<polyline fill="none" stroke="var(--accent)" stroke-width="2.2" points="225.0,50.0 244.5,80.8 264.0,111.6 283.5,142.4 303.0,145.2 322.5,134.0 342.0,122.8 361.5,111.6 381.0,100.4"/>
+<circle cx="303.0" cy="145.2" r="5.5" class="okf"/>
+<text class="tok" x="225" y="215">propone q = 4</text>
+<text class="ts" x="225" y="230">cree 160 · real 260</text>
+<g class="ts" text-anchor="middle"><text x="225.0" y="203">0</text><text x="303.0" y="203">4</text><text x="381.0" y="203">8</text></g>
+<text class="t" x="420" y="18" font-weight="600">3 · con los 2 cortes</text>
+<line class="ax" x1="416" y1="190" x2="582" y2="190"/>
+<polyline fill="none" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="4 3" points="420.0,50.0 439.5,80.8 459.0,111.6 478.5,114.4 498.0,117.2 517.5,120.0 537.0,122.8 556.5,111.6 576.0,100.4"/>
+<polyline fill="none" stroke="var(--accent)" stroke-width="2.2" points="420.0,50.0 439.5,80.8 459.0,111.6 478.5,114.4 498.0,117.2 517.5,120.0 537.0,122.8 556.5,111.6 576.0,100.4"/>
+<circle cx="537.0" cy="122.8" r="5.5" class="okf"/>
+<text class="tok" x="420" y="215">propone q = 6</text>
+<text class="ts" x="420" y="230">cree 240 · real 240</text>
+<g class="ts" text-anchor="middle"><text x="420.0" y="203">0</text><text x="498.0" y="203">4</text><text x="576.0" y="203">8</text></g>
+</svg>
+    </div>
+    <figcaption>Línea punteada = costo real total (compra + urgencias). Línea roja = lo que cree el maestro (compra + θ). El punto verde es lo que propone. En la iteración 1 cree que las urgencias son gratis y propone no comprar nada. Con el corte 1 propone 4. Con el corte 2 su vista coincide con la realidad y propone 6.</figcaption>
+  </figure>
+  <div class="tbl"><table>
+    <thead><tr><th>Iteración</th><th>Propone</th><th>Cree que cuesta</th><th>Cuesta de verdad</th><th>Nota que recibe</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td class="n">q = 0</td><td class="n">0</td><td class="n">500</td><td><code>θ ≥ 500 − 150·q</code> (normal y duro piden más)</td></tr>
+      <tr><td>2</td><td class="n">q = 4</td><td class="n">160</td><td class="n">260</td><td><code>θ ≥ 300 − 50·q</code> (solo el duro pide más)</td></tr>
+      <tr><td>3</td><td class="n">q = 6</td><td class="n">240</td><td class="n">240</td><td>coinciden: fin</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Cuándo parar: las dos cotas</h3>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 210" role="img" aria-label="Cota inferior y superior por iteración: 0 y 500, 160 y 260, 240 y 240. Cuando se juntan, el plan es óptimo.">
+<line class="ax" x1="80" y1="185" x2="560" y2="185"/>
+<polyline fill="none" stroke="var(--accent)" stroke-width="2" points="140,45.0 310,112.2 480,117.8"/>
+<polyline fill="none" stroke="var(--j1)" stroke-width="2" points="140,185.0 310,140.2 480,117.8"/>
+<line x1="140" y1="45.0" x2="140" y2="185.0" stroke="var(--line)" stroke-width="10" opacity="0.6"/>
+<circle cx="140" cy="45.0" r="5" class="lateb"/><circle cx="140" cy="185.0" r="5" style="fill:var(--j1)"/>
+<text class="ta" x="150" y="39.0">500</text><text class="t" x="150" y="201.0" style="fill:var(--j1)">0</text>
+<text class="ts" x="140" y="202" text-anchor="middle">iteración 1</text>
+<line x1="310" y1="112.2" x2="310" y2="140.2" stroke="var(--line)" stroke-width="10" opacity="0.6"/>
+<circle cx="310" cy="112.2" r="5" class="lateb"/><circle cx="310" cy="140.2" r="5" style="fill:var(--j1)"/>
+<text class="ta" x="320" y="106.2">260</text><text class="t" x="320" y="156.2" style="fill:var(--j1)">160</text>
+<text class="ts" x="310" y="202" text-anchor="middle">iteración 2</text>
+<line x1="480" y1="117.8" x2="480" y2="117.8" stroke="var(--line)" stroke-width="10" opacity="0.6"/>
+<circle cx="480" cy="117.8" r="5" class="lateb"/><circle cx="480" cy="117.8" r="5" style="fill:var(--j1)"/>
+<text class="ta" x="490" y="111.8">240</text><text class="t" x="490" y="133.8" style="fill:var(--j1)">240</text>
+<text class="ts" x="480" y="202" text-anchor="middle">iteración 3</text>
+<text class="ta" x="80" y="16">superior: el mejor plan real evaluado</text>
+<text class="t" x="80" y="30" style="fill:var(--j1)">inferior: lo que cree el maestro</text>
+<text class="tok" x="474" y="91.8" text-anchor="end">se juntan: óptimo</text>
+</svg>
+    </div>
+    <figcaption>Es la misma idea del gap en branch &amp; bound (lección 3). La <b>cota inferior</b> es lo que cree el maestro: como sus notas nunca exageran, el óptimo no puede ser más barato. La <b>cota superior</b> es el mejor plan que ya evaluaste de verdad. Cuando se juntan, ese plan es el óptimo, demostrado.</figcaption>
+  </figure>
+
+  <!-- ============ 4 ============ -->
+  <h2>4. Con 10.000 inviernos</h2>
+  <p>Ahora los 10.000 inviernos de Monte Carlo de la lección 8. La forma extendida tendría 10.001 variables. Con Benders:</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Iteración</th><th>Propone</th><th>Cota inferior</th><th>Cota superior</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td class="n">q = 0</td><td class="n">0,0</td><td class="n">640,9</td></tr>
+      <tr><td>2</td><td class="n">q = 4</td><td class="n">160,0</td><td class="n">302,6</td></tr>
+      <tr><td>3</td><td class="n">q = 7</td><td class="n">283,9</td><td class="n">302,6</td></tr>
+      <tr><td>4</td><td class="n">q = 6</td><td class="n">295,8</td><td class="n">302,6</td></tr>
+      <tr><td>5</td><td class="n">q = 5</td><td class="n">296,4</td><td class="n">296,4</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><b>5 iteraciones</b> y el óptimo: 5 módulos, 296,4 mil €. Es lo mismo que daba el SAA de la lección 8.</li>
+    <li>El maestro <b>nunca tuvo más de 2 variables</b> y 4 cortes. Cada iteración resolvió 10.000 subproblemas chiquitos, que son independientes: se pueden repartir entre muchos computadores.</li>
+    <li>Las 10.000 notas de una iteración se juntan en <b>un</b> corte (promediando). Se llama corte agregado o <i>single-cut</i>. También se puede mandar una nota por invierno (<i>multi-cut</i>): más cortes, menos iteraciones.</li>
+  </ul>
+
+  <!-- ============ 5 ============ -->
+  <h2>5. Cuándo usarlo y cuándo no</h2>
+  <div class="rule"><span><b>Usa Benders cuando hay pocas decisiones "de hoy" que amarran muchos subproblemas iguales, y la forma extendida ya no cabe o tarda demasiado. Si la forma extendida resuelve en segundos, no lo necesitas.</b></span></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Problema</th><th>El maestro decide</th><th>Cada subproblema</th></tr></thead>
+    <tbody>
+      <tr><td>2 etapas con muchos escenarios (lección 8)</td><td>stock en las bases</td><td>envíos en un invierno</td></tr>
+      <tr><td>Expansión de una red eléctrica</td><td>qué líneas, baterías o parques construir</td><td>la operación (despacho) en un escenario de viento y demanda</td></tr>
+      <tr><td>Ubicación de bases (lección 5)</td><td>qué bases abrir (binarias)</td><td>el transporte, que es un LP</td></tr>
+      <tr><td>Mantenimiento de una flota</td><td>qué semana para cada turbina</td><td>la producción perdida, por parque</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>Dos detalles que preguntan:</b></p>
+  <ul>
+    <li><b>Corte de factibilidad.</b> Si el plan del jefe hace imposible un subproblema (por ejemplo, no se permite urgencia y falta stock), la nota no dice "cuesta tanto" sino "ese plan no sirve: q tiene que ser al menos tanto". En los repuestos nunca pasa: la urgencia siempre es posible. Eso se llama <b>recurso completo</b>.</li>
+    <li><b>El subproblema debe ser un LP.</b> Los precios sombra salen de un LP. Si los subproblemas tienen binarias, Benders clásico no aplica tal cual.</li>
+  </ul>
+
+  <h3>Benders contra generación de columnas</h3>
+  <p>Las dos son descomposiciones. La diferencia es qué le crece al maestro:</p>
+  <figure>
+    <div class="fig">
+    <svg viewBox="0 0 600 205" role="img" aria-label="Benders le agrega filas (cortes) al maestro. La generación de columnas le agrega columnas (planes completos, como el calendario de un barco).">
+      <text class="t" x="30" y="20" font-weight="600">Benders: crecen las filas</text>
+      <text class="ts" x="70" y="42" text-anchor="middle">q</text><text class="ts" x="130" y="42" text-anchor="middle">θ</text>
+      <rect x="40" y="50" width="120" height="24" fill="none" stroke="var(--line)"/><text class="ts" x="170" y="66">objetivo</text>
+      <rect class="lateb" x="40" y="80" width="120" height="22" opacity="0.8"/><text class="ta" x="170" y="95">+ corte 1</text>
+      <rect class="lateb" x="40" y="106" width="120" height="22" opacity="0.8"/><text class="ta" x="170" y="121">+ corte 2</text>
+      <rect class="lateb" x="40" y="132" width="120" height="22" opacity="0.4"/><text class="ta" x="170" y="147">+ corte 3 …</text>
+      <text class="ts" x="30" y="180">pocas variables,</text><text class="ts" x="30" y="194">muchas filas nuevas</text>
+
+      <text class="t" x="320" y="20" font-weight="600">Columnas (Dantzig-Wolfe)</text>
+      <rect x="330" y="50" width="40" height="104" fill="none" stroke="var(--line)"/>
+      <rect class="b1" x="374" y="50" width="40" height="104" opacity="0.85"/>
+      <rect class="b1" x="418" y="50" width="40" height="104" opacity="0.85"/>
+      <rect class="b1" x="462" y="50" width="40" height="104" opacity="0.45"/>
+      <text class="ts" x="350" y="168" text-anchor="middle">inicio</text>
+      <text class="t" x="394" y="168" text-anchor="middle">+1</text><text class="t" x="438" y="168" text-anchor="middle">+2</text><text class="t" x="482" y="168" text-anchor="middle">+3 …</text>
+      <text class="ts" x="320" y="184">cada columna: un plan completo</text><text class="ts" x="320" y="198">(el calendario de un barco)</text>
+    </svg>
+    </div>
+    <figcaption>Benders fija las decisiones "de arriba" y aprende el costo de lo de abajo con cortes. La generación de columnas (Dantzig-Wolfe) empieza con pocos planes completos y le agrega los que conviene, como los calendarios de barco que mencionaba la lección 7.</figcaption>
+  </figure>
+
+  <h2>En la entrevista</h2>
+  <p>Pregunta típica: <i>"Your stochastic model has thousands of scenarios and the extensive form is too big. What would you do?"</i></p>
+  <div class="rule"><span><i>"I'd use Benders decomposition, the L-shaped method. The first-stage decisions go in a small master problem with a variable θ that estimates the recourse cost. For a given first-stage plan, each scenario is an independent LP; its duals give a cut θ ≥ … that never overestimates the true cost. The master's objective is a lower bound, the best evaluated plan is an upper bound, and I stop when they meet. The subproblems can run in parallel. In my spare parts example, 10,000 scenarios converged in 5 iterations with a master of two variables."</i></span></div>
+  <p>Seguimiento: <i>"When does it work well?"</i></p>
+  <div class="rule"><span><i>"When few complicating variables link many similar subproblems, and the subproblems are LPs, so duals exist. If a plan can make a subproblem infeasible, you add feasibility cuts. In energy, the classic case is capacity expansion: investment decisions in the master, hourly dispatch per weather scenario in the subproblems."</i></span></div>
+
+  <h2>Para correrlo</h2>
+  <p>El script <code>python/benders_repuestos.py</code> hace las dos versiones de esta página:</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Función</th><th>Qué es en los dibujos</th></tr></thead>
+    <tbody>
+      <tr><td><code>maestro(cortes)</code></td><td>el jefe: <code>min 40·q + θ</code> con las notas que tiene</td></tr>
+      <tr><td><code>subproblema(q, fallas)</code></td><td>un ayudante: devuelve el costo y el precio sombra (<code>m.dual</code>)</td></tr>
+      <tr><td><code>benders()</code></td><td>las 3 iteraciones con 3 escenarios</td></tr>
+      <tr><td><code>benders_montecarlo()</code></td><td>las 5 iteraciones con 10.000 inviernos</td></tr>
+    </tbody>
+  </table></div>
+  <p>Ejercicio: cambia la urgencia a 150 mil € y adivina antes cuántas iteraciones necesita. (Con la regla del módulo k de la lección 8, el óptimo pasa a 2 módulos.)</p>
+</div>
+</body>
+</html>
