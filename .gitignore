@@ -38,3 +38,10 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# HiGHS log written by the notebooks
+highs.log
+
+# Python
+__pycache__/
+*.pyc
