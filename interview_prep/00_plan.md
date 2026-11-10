@@ -40,7 +40,7 @@ Supuesto: ~2 h entre semana, ~4 h fin de semana.
 - Despliegue de un optimizador como servicio.
 - Contexto del sector y de la empresa.
 
-## 3. Calendario (actualizado el 7 nov)
+## 3. Calendario (actualizado el 10 nov)
 El 26 de octubre fue lunes. La entrevista es el **miércoles 11 de noviembre**.
 
 Desde el 27 de octubre sigues la ruta de `notebooks/README.md`: una lección por día, de modelos pequeños a grandes.
@@ -77,9 +77,7 @@ Si no alcanza: la sección 6 de la L10 (la cartera de Banco Agrario, que ya cono
 | Mar 3 nov | L5 + L6: redes y tu red de turnos de Siigo | `notebooks/05_redes_y_turnos.ipynb`, `09_red_siigo.md`, `diagramas/red_turnos_siigo.png` |
 | Mié 4 | L7: secuenciación (máquinas y barcos) | `notebooks/06_secuenciacion.ipynb`, `python/jobshop_cpsat.py`, `08_modelos_sector.md` |
 | Sáb 7 (6 h 30) | L8 → L11 → L9 → L10 (ver el ajuste del 7 nov). La L8 y la L11 vienen del jueves y el viernes | `notebooks/07_incertidumbre.ipynb`, `10_ml_y_optimizacion.ipynb`, `08_heuristicas.ipynb`, `09_varias_metas.ipynb`; apoyo: `07_conceptos.md` §2–5 |
-| Dom 8 (4 h) | ML, estadística y producción + Python/SQL cronometrado | `03_question_bank.md` §B–D, `04_coding_drills.md` |
-| Lun 9 | Simulacro único: formulación en vivo + ML + contexto del sector | `05_sector.md` |
-| Mar 10 | Repaso ligero, STAR en voz alta. Dormir bien | `01_star_stories.md` |
+| Mar 10 (3 h 45) | Las sesiones del domingo, el lunes y el martes, juntas: ML y producción, código, simulacro, STAR, hoja final. Dormir bien | `10_dia_final.md`, `11_simulacro.md`, `12_hoja_final.md` |
 | Mié 11 | Entrevista | — |
 
 Para los simulacros puedes pedirme: "hazme una entrevista técnica de 45 min para este cargo, en inglés, una pregunta a la vez".
