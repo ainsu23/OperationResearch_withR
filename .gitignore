@@ -41,3 +41,7 @@ vignettes/*.pdf
 
 # HiGHS log written by the notebooks
 highs.log
+
+# Python
+__pycache__/
+*.pyc
